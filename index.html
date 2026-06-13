@@ -1,88 +1,115 @@
+bash
+
+cat /mnt/user-data/outputs/가계부_v4_supabase.html
+출력
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>영준 & 원지</title>
+<title>영준 & 원지 가계부</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --d0: #080F1C;
-  --d1: #0D1829;
-  --d2: #132035;
-  --d3: #1A2B45;
-  --d4: #213354;
-  --d5: #2C4270;
+  /* ── backgrounds ── */
+  --bg:      #F7F5FF;   /* lavender-tinted white */
+  --bg2:     #EEEbFF;
+  --card:    #FFFFFF;
+  --card2:   #F9F8FF;
+  --line:    #E8E4F8;
 
-  --t0: #EEE9E2;
-  --t1: #8A9EBA;
-  --t2: #445E7A;
-  --line: #1A2B45;
+  /* ── ink ── */
+  --ink:     #1B1730;
+  --ink2:    #5A5478;
+  --ink3:    #9C96B8;
 
-  --gold:  #D4A84B;
-  --gold2: #EFC96A;
-  --mint:  #3BBFA0;
-  --mint2: #5ED4B8;
-  --coral: #E05C5C;
-  --coral2:#F07878;
-  --blue:  #4A8FD4;
+  /* ── indigo — trust / primary ── */
+  --indigo:  #4F46E5;
+  --indigo2: #6D66F0;
+  --indigo-lt:#EEF0FF;
 
-  --gg: rgba(212,168,75,0.16);
-  --gm: rgba(59,191,160,0.12);
+  /* ── teal — income / positive ── */
+  --teal:    #0D9488;
+  --teal2:   #2DD4BF;
+  --teal-lt: #F0FDFA;
 
-  --r: 18px;
+  /* ── coral — expense ── */
+  --coral:   #F43F5E;
+  --coral2:  #FB7185;
+  --coral-lt:#FFF1F3;
+
+  /* ── amber — savings ── */
+  --amber:   #F59E0B;
+  --amber2:  #FCD34D;
+  --amber-lt:#FFFBEB;
+
+  /* ── sky — cumulative ── */
+  --sky:     #0284C7;
+  --sky-lt:  #F0F9FF;
+
+  --r:  18px;
   --rs: 12px;
+  --sh: 0 1px 3px rgba(79,70,229,0.06), 0 4px 16px rgba(79,70,229,0.07);
+  --sh-sm: 0 1px 2px rgba(79,70,229,0.05), 0 2px 8px rgba(79,70,229,0.05);
 }
 
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 body {
   font-family:'Noto Sans KR','Inter',sans-serif;
-  background:var(--d1); color:var(--t0);
-  min-height:100vh; padding-bottom:82px;
+  background:var(--bg); color:var(--ink);
+  min-height:100vh; padding-bottom:88px;
   -webkit-font-smoothing:antialiased;
 }
 
-/* ── NAV (bottom only) ── */
+/* ── BOTTOM NAV ── */
 .nav {
   position:fixed; bottom:0; left:0; right:0;
-  background:rgba(8,15,28,0.97);
+  background:rgba(255,255,255,0.97);
   backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
   border-top:1px solid var(--line);
-  display:flex; padding:8px 0 22px; z-index:60;
+  display:flex; padding:8px 0 24px; z-index:60;
+  box-shadow:0 -2px 16px rgba(79,70,229,0.08);
 }
 .ni { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; padding:4px 0; }
-.ni-icon { font-size:20px; opacity:0.25; transition:opacity 0.15s; }
-.ni-lbl  { font-size:10px; color:var(--t2); font-weight:600; transition:color 0.15s; letter-spacing:0.3px; }
+.ni-icon { font-size:21px; opacity:0.22; transition:opacity 0.15s; }
+.ni-lbl  { font-size:10px; color:var(--ink3); font-weight:600; transition:color 0.15s; letter-spacing:0.2px; }
 .ni.on .ni-icon { opacity:1; }
-.ni.on .ni-lbl  { color:var(--gold); }
+.ni.on .ni-lbl  { color:var(--indigo); }
 
 /* ── HEADER ── */
 .header {
-  background:var(--d0);
-  padding:52px 20px 16px;
+  background:var(--card);
+  padding:52px 18px 14px;
   display:flex; justify-content:space-between; align-items:center;
   position:sticky; top:0; z-index:50;
   border-bottom:1px solid var(--line);
+  box-shadow:var(--sh-sm);
 }
-.brand-name { font-size:16px; font-weight:700; color:var(--t0); letter-spacing:-0.4px; }
-.brand-sub  { font-size:10px; color:var(--t2); letter-spacing:1.4px; text-transform:uppercase; margin-top:1px; }
+.brand-name { font-size:16px; font-weight:700; color:var(--ink); letter-spacing:-0.4px; }
+.brand-sub  { font-size:10px; color:var(--ink3); letter-spacing:1.2px; text-transform:uppercase; margin-top:1px; }
+
+/* sync indicator */
+.sync-indicator {
+  display:flex; align-items:center; gap:5px;
+  font-size:10px; color:var(--ink3); margin-top:2px;
+}
+.sync-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; transition:background 0.3s; }
+.sync-dot.ok   { background:#22C55E; box-shadow:0 0 5px #22C55E; }
+.sync-dot.off  { background:var(--ink3); }
+.sync-dot.busy { background:var(--amber); animation:pulse 1s infinite; }
+.sync-dot.err  { background:var(--coral); }
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
 
 .mpill {
   display:flex; align-items:center; gap:2px;
-  background:var(--d2); border-radius:12px; padding:4px;
+  background:var(--bg2); border-radius:12px; padding:4px;
+  border:1.5px solid var(--line);
 }
-.mpill-btn {
-  background:none; border:none; color:var(--t1);
-  width:28px; height:28px; border-radius:8px; font-size:15px;
-  cursor:pointer; display:flex; align-items:center; justify-content:center;
-}
-.mpill-btn:active { background:var(--d4); }
-.mpill-lbl {
-  font-family:'Inter',sans-serif;
-  font-size:13px; font-weight:700; color:var(--t0);
-  min-width:62px; text-align:center; letter-spacing:-0.3px;
-}
+.mpill-btn { background:none; border:none; color:var(--ink2); width:28px; height:28px; border-radius:8px; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.mpill-btn:active { background:var(--line); }
+.mpill-lbl { font-family:'Inter',sans-serif; font-size:13px; font-weight:700; color:var(--ink); min-width:62px; text-align:center; letter-spacing:-0.3px; }
 
 /* ── PAGES ── */
 .content { padding:16px; }
@@ -91,319 +118,239 @@ body {
 
 /* ── HERO ── */
 .hero {
-  background:var(--d2); border-radius:var(--r);
-  padding:22px 20px 20px; margin-bottom:10px;
-  position:relative; overflow:hidden;
+  background:linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #6D28D9 100%);
+  border-radius:var(--r); padding:24px 22px 22px;
+  margin-bottom:10px; position:relative; overflow:hidden;
 }
 .hero::before {
-  content:''; position:absolute; top:-60px; right:-50px;
+  content:''; position:absolute; top:-60px; right:-40px;
   width:200px; height:200px;
-  background:radial-gradient(circle,var(--gg) 0%,transparent 65%);
+  background:radial-gradient(circle,rgba(255,255,255,0.12) 0%,transparent 65%);
   pointer-events:none;
 }
 .hero::after {
-  content:''; position:absolute; bottom:-40px; left:-20px;
-  width:140px; height:140px;
-  background:radial-gradient(circle,var(--gm) 0%,transparent 65%);
+  content:''; position:absolute; bottom:-30px; left:-10px;
+  width:150px; height:150px;
+  background:radial-gradient(circle,rgba(45,212,191,0.2) 0%,transparent 65%);
   pointer-events:none;
 }
-.hero-eyebrow { font-size:10px; font-weight:600; letter-spacing:1.6px; text-transform:uppercase; color:var(--t2); margin-bottom:4px; }
-.hero-num {
-  font-family:'Inter',sans-serif;
-  font-size:50px; font-weight:900; letter-spacing:-3px; line-height:1;
-  color:var(--t0); margin-bottom:4px;
-}
-.hero-num .unit { font-size:18px; font-weight:300; letter-spacing:0; color:var(--t1); margin-left:2px; }
+.hero-eyebrow { font-size:10px; font-weight:600; letter-spacing:1.8px; text-transform:uppercase; color:rgba(255,255,255,0.5); margin-bottom:4px; }
+.hero-num { font-family:'Inter',sans-serif; font-size:50px; font-weight:900; letter-spacing:-3px; line-height:1; color:#fff; margin-bottom:4px; }
+.hero-num .unit { font-size:18px; font-weight:300; letter-spacing:0; color:rgba(255,255,255,0.5); margin-left:2px; }
 .hero-meta { display:flex; align-items:center; gap:8px; margin-bottom:18px; }
-.hero-sub { font-size:12px; color:var(--t2); }
-.hero-pct {
-  font-family:'Inter',sans-serif; font-size:12px; font-weight:700;
-  color:var(--gold); background:var(--gg); padding:2px 9px; border-radius:99px;
-}
-.track-bg { height:4px; background:var(--d4); border-radius:99px; overflow:hidden; margin-bottom:18px; position:relative; }
-.track-fill {
-  height:100%; border-radius:99px;
-  background:linear-gradient(90deg,var(--gold),var(--gold2));
-  transition:width 1s cubic-bezier(0.4,0,0.2,1);
-}
+.hero-sub { font-size:12px; color:rgba(255,255,255,0.5); }
+.hero-pct { font-family:'Inter',sans-serif; font-size:12px; font-weight:700; color:#fff; background:rgba(255,255,255,0.2); padding:2px 10px; border-radius:99px; }
+.track-bg { height:5px; background:rgba(255,255,255,0.15); border-radius:99px; overflow:hidden; margin-bottom:18px; }
+.track-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,#2DD4BF,#A78BFA); transition:width 1s cubic-bezier(0.4,0,0.2,1); }
 .hero-stats { display:flex; }
-.hst {
-  flex:1; padding-right:14px; margin-right:14px;
-  border-right:1px solid var(--line);
-}
+.hst { flex:1; padding-right:14px; margin-right:14px; border-right:1px solid rgba(255,255,255,0.15); }
 .hst:last-child { border-right:none; padding-right:0; margin-right:0; }
-.hst-val { font-family:'Inter',sans-serif; font-size:15px; font-weight:700; letter-spacing:-0.4px; color:var(--t0); }
-.hst-lbl { font-size:10px; color:var(--t2); margin-top:2px; }
-.hero-goal-btn {
-  position:absolute; top:18px; right:16px;
-  background:var(--d3); border:none; border-radius:99px;
-  padding:5px 12px; font-size:11px; font-weight:500;
-  color:var(--t1); cursor:pointer; font-family:inherit;
-}
+.hst-val { font-family:'Inter',sans-serif; font-size:14px; font-weight:700; color:rgba(255,255,255,0.9); }
+.hst-lbl { font-size:10px; color:rgba(255,255,255,0.4); margin-top:2px; }
+.hero-goal-btn { position:absolute; top:20px; right:18px; background:rgba(255,255,255,0.15); border:none; border-radius:99px; padding:5px 12px; font-size:11px; font-weight:500; color:rgba(255,255,255,0.7); cursor:pointer; font-family:inherit; }
 
-/* ── TILES (2-col) ── */
+/* ── TILES ── */
 .tile-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
-.tile { background:var(--d2); border-radius:var(--rs); padding:14px; }
-.tile-dot-row { display:flex; align-items:center; gap:5px; margin-bottom:8px; }
-.dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
-.tile-lbl { font-size:11px; color:var(--t2); font-weight:500; }
-.tile-val { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; letter-spacing:-0.8px; color:var(--t0); }
-.tile-val .u { font-size:11px; font-weight:400; color:var(--t2); }
-.tile-sub { font-size:10px; color:var(--t2); margin-top:3px; }
+.tile { background:var(--card); border-radius:var(--rs); padding:14px; box-shadow:var(--sh-sm); }
+.tile-tag { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:700; padding:3px 8px; border-radius:6px; margin-bottom:8px; letter-spacing:0.3px; }
+.tag-amber  { background:var(--amber-lt); color:var(--amber); }
+.tag-sky    { background:var(--sky-lt); color:var(--sky); }
+.tile-val { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; letter-spacing:-0.8px; color:var(--ink); }
+.tile-val .u { font-size:11px; font-weight:400; color:var(--ink3); }
+.tile-sub { font-size:10px; color:var(--ink3); margin-top:3px; }
 
 /* ── SECTION LABEL ── */
-.slbl { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--t2); margin:16px 0 8px; }
+.slbl { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink3); margin:16px 0 8px; }
 
-/* ── NOTE CARD (홈 특이사항) ── */
-.note-card {
-  background:var(--d2); border-radius:var(--r); padding:16px; margin-bottom:10px;
-  min-height:80px;
-}
-.note-month { font-size:11px; color:var(--t2); margin-bottom:8px; font-weight:600; letter-spacing:0.3px; }
-.note-text  { font-size:14px; color:var(--t1); line-height:1.65; white-space:pre-wrap; }
-.note-empty { font-size:13px; color:var(--t2); font-style:italic; }
+/* ── NOTE CARD ── */
+.note-card { background:var(--card); border-radius:var(--r); padding:16px; margin-bottom:10px; box-shadow:var(--sh-sm); min-height:80px; }
+.note-month { font-size:11px; color:var(--ink3); margin-bottom:7px; font-weight:600; }
+.note-text  { font-size:14px; color:var(--ink2); line-height:1.65; white-space:pre-wrap; }
+.note-empty { font-size:13px; color:var(--ink3); font-style:italic; }
 
-/* ── INPUT PAGE ── */
-.income-card { background:var(--d2); border-radius:var(--r); overflow:hidden; margin-bottom:10px; }
-.inc-row {
-  display:flex; align-items:center; padding:15px 16px; gap:12px;
-  border-bottom:1px solid var(--line);
-}
+/* ── INPUT ── */
+.income-card { background:var(--card); border-radius:var(--r); overflow:hidden; margin-bottom:10px; box-shadow:var(--sh-sm); }
+.inc-row { display:flex; align-items:center; padding:15px 16px; gap:12px; border-bottom:1px solid var(--line); }
 .inc-row:last-child { border-bottom:none; }
-.av { width:36px; height:36px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
-.av-m { background:rgba(59,191,160,0.12); }
-.av-g { background:rgba(212,168,75,0.12); }
-.inc-who  { font-size:14px; font-weight:600; color:var(--t0); }
-.inc-desc { font-size:10px; color:var(--t2); margin-top:1px; }
+.av { width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+.av-t { background:var(--teal-lt); }
+.av-i { background:var(--indigo-lt); }
+.inc-who  { font-size:14px; font-weight:600; color:var(--ink); }
+.inc-desc { font-size:10px; color:var(--ink3); margin-top:1px; }
 .inc-right { display:flex; align-items:baseline; gap:3px; margin-left:auto; }
-.inc-num {
-  font-family:'Inter',sans-serif; font-size:20px; font-weight:700; letter-spacing:-0.5px;
-  background:none; border:none; outline:none; text-align:right; width:88px; color:var(--mint);
-}
-.inc-num.g { color:var(--gold); }
-.inc-unit { font-size:11px; color:var(--t2); }
+.inc-num { font-family:'Inter',sans-serif; font-size:20px; font-weight:700; letter-spacing:-0.5px; background:none; border:none; outline:none; text-align:right; width:88px; color:var(--teal); }
+.inc-num.ind { color:var(--indigo); }
+.inc-unit { font-size:11px; color:var(--ink3); }
 
-.exp-card { background:var(--d2); border-radius:var(--r); overflow:hidden; margin-bottom:10px; }
-.exp-head {
-  display:flex; align-items:center; justify-content:space-between;
-  padding:12px 16px; background:var(--d3); border-bottom:1px solid var(--line);
-}
+.exp-card { background:var(--card); border-radius:var(--r); overflow:hidden; margin-bottom:10px; box-shadow:var(--sh-sm); }
+.exp-head { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:var(--card2); border-bottom:1px solid var(--line); }
 .exp-head-l { display:flex; align-items:center; gap:7px; }
-.exp-title  { font-size:13px; font-weight:700; color:var(--t0); }
-.exp-badge  { font-size:10px; font-weight:600; padding:2px 7px; border-radius:5px; letter-spacing:0.3px; }
-.eb-c { background:rgba(224,92,92,0.15); color:var(--coral2); }
-.eb-g { background:rgba(212,168,75,0.15); color:var(--gold2); }
+.exp-title { font-size:13px; font-weight:700; color:var(--ink); }
+.exp-badge { font-size:10px; font-weight:600; padding:2px 7px; border-radius:6px; }
+.eb-c { background:var(--coral-lt); color:var(--coral); }
+.eb-a { background:var(--amber-lt); color:var(--amber); }
 .exp-sum { font-family:'Inter',sans-serif; font-size:14px; font-weight:700; color:var(--coral); }
 .exp-list { padding:3px 0 4px; }
-.exp-item {
-  display:flex; align-items:center; padding:10px 16px; gap:9px;
-  border-bottom:1px solid var(--line);
-}
+.exp-item { display:flex; align-items:center; padding:10px 16px; gap:9px; border-bottom:1px solid var(--line); }
 .exp-item:last-child { border-bottom:none; }
-.exp-dot { width:5px; height:5px; border-radius:50%; border:1.5px solid var(--t2); flex-shrink:0; }
-.exp-name {
-  flex:1; font-size:13px; color:var(--t1); background:none;
-  border:none; outline:none; font-family:inherit; min-width:0;
-}
-.exp-name::placeholder { color:var(--t2); }
-.exp-amt {
-  font-family:'Inter',sans-serif; font-size:13px; font-weight:600; color:var(--t0);
-  background:none; border:none; outline:none; font-family:inherit; text-align:right; width:72px;
-}
-.exp-amt::placeholder { color:var(--t2); }
-.exp-unit { font-size:10px; color:var(--t2); flex-shrink:0; }
-.exp-del {
-  width:20px; height:20px; border-radius:5px;
-  background:rgba(224,92,92,0.12); border:none; color:var(--coral);
-  font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center;
-}
-.add-btn {
-  margin:5px 12px 10px;
-  display:flex; align-items:center; justify-content:center; gap:5px;
-  background:none; border:1.5px dashed var(--d4); border-radius:11px; padding:9px;
-  color:var(--t2); font-size:12px; font-weight:500; cursor:pointer;
-  width:calc(100% - 24px); font-family:inherit;
-}
-.add-btn:active { border-color:var(--gold); color:var(--gold); }
+.exp-dot { width:5px; height:5px; border-radius:50%; border:1.5px solid var(--ink3); flex-shrink:0; }
+.exp-name { flex:1; font-size:13px; color:var(--ink2); background:none; border:none; outline:none; font-family:inherit; min-width:0; }
+.exp-name::placeholder { color:var(--ink3); }
+.exp-amt { font-family:'Inter',sans-serif; font-size:13px; font-weight:600; color:var(--ink); background:none; border:none; outline:none; font-family:inherit; text-align:right; width:72px; }
+.exp-amt::placeholder { color:var(--ink3); }
+.exp-unit { font-size:10px; color:var(--ink3); }
+.exp-del { width:20px; height:20px; border-radius:5px; background:var(--coral-lt); border:none; color:var(--coral); font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.add-btn { margin:5px 12px 10px; display:flex; align-items:center; justify-content:center; gap:5px; background:none; border:1.5px dashed var(--line); border-radius:11px; padding:9px; color:var(--ink3); font-size:12px; font-weight:500; cursor:pointer; width:calc(100% - 24px); font-family:inherit; }
+.add-btn:active { border-color:var(--indigo); color:var(--indigo); }
 
-/* note input */
-.note-input-card { background:var(--d2); border-radius:var(--r); padding:16px; margin-bottom:10px; }
-.note-input-label { font-size:11px; font-weight:700; color:var(--t2); letter-spacing:0.8px; text-transform:uppercase; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
-.note-textarea {
-  width:100%; background:var(--d3); border:1.5px solid var(--d4);
-  border-radius:12px; padding:12px 14px;
-  font-size:14px; color:var(--t0); font-family:inherit; line-height:1.6;
-  outline:none; resize:none; min-height:90px;
-  transition:border-color 0.15s;
-}
-.note-textarea:focus { border-color:var(--gold); }
-.note-textarea::placeholder { color:var(--t2); }
+.note-input-card { background:var(--card); border-radius:var(--r); padding:16px; margin-bottom:10px; box-shadow:var(--sh-sm); }
+.note-input-label { font-size:11px; font-weight:700; color:var(--ink3); letter-spacing:0.8px; text-transform:uppercase; margin-bottom:10px; }
+.note-textarea { width:100%; background:var(--bg); border:1.5px solid var(--line); border-radius:12px; padding:12px 14px; font-size:14px; color:var(--ink); font-family:inherit; line-height:1.6; outline:none; resize:none; min-height:90px; transition:border-color 0.15s; }
+.note-textarea:focus { border-color:var(--indigo); }
+.note-textarea::placeholder { color:var(--ink3); }
 
-/* ── STATS PAGE ── */
-.stat-tabs { display:flex; background:var(--d2); border-radius:var(--r); padding:4px; margin-bottom:12px; gap:4px; }
-.stat-tab {
-  flex:1; padding:9px; text-align:center; font-size:13px; font-weight:600;
-  color:var(--t2); border-radius:12px; cursor:pointer; transition:all 0.15s;
-}
-.stat-tab.on { background:var(--d4); color:var(--gold); }
+/* ── STATS ── */
+.stat-tabs { display:flex; background:var(--card); border-radius:var(--r); padding:4px; margin-bottom:12px; gap:4px; box-shadow:var(--sh-sm); }
+.stat-tab { flex:1; padding:9px; text-align:center; font-size:13px; font-weight:600; color:var(--ink3); border-radius:12px; cursor:pointer; transition:all 0.15s; }
+.stat-tab.on { background:var(--indigo); color:#fff; }
 
 .stat-panel { display:none; }
 .stat-panel.on { display:block; }
 
-/* month stat cards */
 .mstat-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
-.mstat-card { background:var(--d2); border-radius:var(--rs); padding:14px; }
-.msc-lbl { font-size:10px; color:var(--t2); font-weight:600; letter-spacing:0.5px; margin-bottom:6px; display:flex; align-items:center; gap:5px; }
+.mstat-card { background:var(--card); border-radius:var(--rs); padding:14px; box-shadow:var(--sh-sm); }
+.msc-lbl { font-size:10px; color:var(--ink3); font-weight:600; letter-spacing:0.5px; margin-bottom:6px; display:flex; align-items:center; gap:5px; }
 .msc-val { font-family:'Inter',sans-serif; font-size:18px; font-weight:700; letter-spacing:-0.6px; }
 
-/* month bar chart */
-.mbar-card { background:var(--d2); border-radius:var(--r); padding:16px; margin-bottom:10px; }
-.mbar-title { font-size:12px; font-weight:600; color:var(--t1); margin-bottom:14px; }
-
+.mbar-card { background:var(--card); border-radius:var(--r); padding:16px; margin-bottom:10px; box-shadow:var(--sh-sm); }
+.mbar-title { font-size:12px; font-weight:600; color:var(--ink2); margin-bottom:14px; }
 .hbar-wrap { display:flex; flex-direction:column; gap:10px; }
-.hbar-row  { display:flex; align-items:center; gap:10px; }
-.hbar-lbl  { font-size:11px; color:var(--t2); width:44px; flex-shrink:0; }
-.hbar-track { flex:1; height:8px; background:var(--d4); border-radius:99px; overflow:hidden; }
-.hbar-fill  { height:100%; border-radius:99px; transition:width 0.6s cubic-bezier(0.4,0,0.2,1); }
-.hbar-val  { font-family:'Inter',sans-serif; font-size:11px; font-weight:600; color:var(--t1); min-width:40px; text-align:right; }
+.hbar-row { display:flex; align-items:center; gap:10px; }
+.hbar-lbl { font-size:11px; color:var(--ink3); width:44px; flex-shrink:0; }
+.hbar-track { flex:1; height:8px; background:var(--bg2); border-radius:99px; overflow:hidden; }
+.hbar-fill { height:100%; border-radius:99px; transition:width 0.6s cubic-bezier(0.4,0,0.2,1); }
+.hbar-val { font-family:'Inter',sans-serif; font-size:11px; font-weight:600; color:var(--ink2); min-width:40px; text-align:right; }
 
-/* year nav */
-.yr-nav {
-  display:flex; align-items:center; justify-content:space-between;
-  background:var(--d2); border-radius:var(--r); padding:14px 16px; margin-bottom:10px;
-}
-.yr-num { font-family:'Inter',sans-serif; font-size:26px; font-weight:900; letter-spacing:-1.5px; color:var(--t0); }
-.yr-sub { font-size:11px; color:var(--t2); margin-top:1px; }
+.yr-nav { display:flex; align-items:center; justify-content:space-between; background:var(--card); border-radius:var(--r); padding:14px 16px; margin-bottom:10px; box-shadow:var(--sh-sm); }
+.yr-num { font-family:'Inter',sans-serif; font-size:26px; font-weight:900; letter-spacing:-1.5px; color:var(--ink); }
+.yr-sub { font-size:11px; color:var(--ink3); margin-top:1px; }
 .yr-btns { display:flex; gap:6px; }
-.yr-btn {
-  width:34px; height:34px; border-radius:10px; background:var(--d3);
-  border:none; color:var(--t1); font-size:16px; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-}
-.yr-btn:active { background:var(--d4); }
+.yr-btn { width:34px; height:34px; border-radius:10px; background:var(--bg2); border:1px solid var(--line); color:var(--ink2); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.yr-btn:active { background:var(--line); }
 
-/* cumul card */
-.cumul-card {
-  background:var(--d2); border-radius:var(--r); padding:18px 20px;
-  margin-bottom:10px; position:relative; overflow:hidden;
-}
-.cumul-card::before {
-  content:''; position:absolute; top:-40px; right:-40px;
-  width:160px; height:160px;
-  background:radial-gradient(circle,var(--gg) 0%,transparent 65%);
-  pointer-events:none;
-}
-.cumul-eyebrow { font-size:10px; letter-spacing:1.4px; text-transform:uppercase; color:var(--t2); margin-bottom:4px; font-weight:600; }
+.cumul-card { background:linear-gradient(135deg,#4F46E5,#7C3AED); border-radius:var(--r); padding:20px 22px; margin-bottom:10px; position:relative; overflow:hidden; }
+.cumul-card::before { content:''; position:absolute; top:-40px; right:-40px; width:160px; height:160px; background:radial-gradient(circle,rgba(255,255,255,0.12) 0%,transparent 65%); pointer-events:none; }
+.cumul-eyebrow { font-size:10px; letter-spacing:1.4px; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:4px; font-weight:600; }
 .cumul-row { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:12px; }
-.cumul-num { font-family:'Inter',sans-serif; font-size:32px; font-weight:900; letter-spacing:-1.5px; color:var(--t0); }
-.cumul-unit { font-size:13px; font-weight:400; color:var(--t2); }
-.cumul-pct { font-family:'Inter',sans-serif; font-size:36px; font-weight:900; letter-spacing:-2px; color:var(--gold); }
-.cumul-pct-sign { font-size:18px; color:var(--gold); }
-.cumul-track { background:var(--d4); border-radius:99px; height:4px; overflow:hidden; margin-bottom:10px; }
-.cumul-fill  { height:100%; border-radius:99px; background:linear-gradient(90deg,var(--gold),var(--gold2)); transition:width 0.9s; }
+.cumul-num { font-family:'Inter',sans-serif; font-size:30px; font-weight:900; letter-spacing:-1.5px; color:#fff; }
+.cumul-unit { font-size:13px; font-weight:400; color:rgba(255,255,255,0.45); }
+.cumul-pct { font-family:'Inter',sans-serif; font-size:36px; font-weight:900; letter-spacing:-2px; color:#2DD4BF; }
+.cumul-pct-sign { font-size:18px; color:#2DD4BF; }
+.cumul-track { background:rgba(255,255,255,0.15); border-radius:99px; height:5px; overflow:hidden; margin-bottom:10px; }
+.cumul-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,#2DD4BF,#A78BFA); transition:width 0.9s; }
 .cumul-meta { display:flex; justify-content:space-between; }
-.cumul-meta-item { font-size:11px; color:var(--t2); }
-.cumul-meta-val  { font-family:'Inter',sans-serif; font-weight:600; color:var(--t1); }
+.cumul-meta-item { font-size:11px; color:rgba(255,255,255,0.4); }
+.cumul-meta-val { font-family:'Inter',sans-serif; font-weight:600; color:rgba(255,255,255,0.75); }
 
-/* delta badge */
-.delta-badge {
-  display:inline-flex; align-items:center; gap:4px;
-  font-family:'Inter',sans-serif; font-size:12px; font-weight:700;
-  padding:3px 10px; border-radius:99px; margin-top:6px;
-}
-.delta-up   { background:rgba(59,191,160,0.15); color:var(--mint2); }
-.delta-down { background:rgba(224,92,92,0.15); color:var(--coral2); }
-.delta-zero { background:var(--d4); color:var(--t2); }
+.delta-badge { display:inline-flex; align-items:center; gap:4px; font-family:'Inter',sans-serif; font-size:12px; font-weight:700; padding:3px 10px; border-radius:99px; margin-top:6px; }
+.delta-up   { background:rgba(45,212,191,0.2); color:#2DD4BF; }
+.delta-down { background:rgba(244,63,94,0.2); color:#FB7185; }
+.delta-zero { background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.5); }
 
-/* year summary strip */
-.yr-sum { display:grid; grid-template-columns:1fr 1fr 1fr; background:var(--d2); border-radius:var(--r); margin-bottom:10px; overflow:hidden; }
+.yr-sum { display:grid; grid-template-columns:1fr 1fr 1fr; background:var(--card); border-radius:var(--r); margin-bottom:10px; overflow:hidden; box-shadow:var(--sh-sm); }
 .ys { padding:13px 0; text-align:center; border-right:1px solid var(--line); }
 .ys:last-child { border-right:none; }
 .ys-num { font-family:'Inter',sans-serif; font-size:15px; font-weight:700; letter-spacing:-0.4px; }
-.ys-lbl { font-size:10px; color:var(--t2); margin-top:2px; }
+.ys-lbl { font-size:10px; color:var(--ink3); margin-top:2px; }
 
-/* year visual chart — dot/line style */
-.yr-chart-card { background:var(--d2); border-radius:var(--r); padding:16px; margin-bottom:10px; }
-.yr-chart-title { font-size:12px; font-weight:600; color:var(--t1); margin-bottom:16px; }
-
-.dot-chart {
-  position:relative; height:140px;
-  display:flex; align-items:flex-end;
-  padding:0 4px 24px;
-  border-bottom:1px solid var(--line);
-}
-.dot-guide { position:absolute; left:4px; right:4px; height:1px; background:var(--line); opacity:0.4; }
-
+.yr-chart-card { background:var(--card); border-radius:var(--r); padding:16px; margin-bottom:10px; box-shadow:var(--sh-sm); }
+.yr-chart-title { font-size:12px; font-weight:600; color:var(--ink2); margin-bottom:16px; }
+.dot-chart { position:relative; height:140px; display:flex; align-items:flex-end; padding:0 4px 24px; border-bottom:1px solid var(--line); }
+.dot-guide { position:absolute; left:4px; right:4px; height:1px; background:var(--line); opacity:0.7; }
 .dc-group { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
-.dc-dots  { display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:0; height:100%; width:100%; position:relative; }
-
-/* stacked horizontal thin bars per month */
 .dc-bars { display:flex; gap:2px; align-items:flex-end; justify-content:center; height:100%; }
-.dc-bar  { width:9px; border-radius:3px 3px 0 0; min-height:2px; transition:height 0.6s cubic-bezier(0.4,0,0.2,1); }
-.dc-lbl  {
-  position:absolute; bottom:-18px; font-size:9px; color:var(--t2);
-  left:50%; transform:translateX(-50%); white-space:nowrap;
-}
-.dc-lbl.now { color:var(--gold); font-weight:700; }
-.dc-group.now::before {
-  content:''; position:absolute; top:0; left:10%; right:10%; bottom:24px;
-  background:rgba(212,168,75,0.05); border-radius:6px;
-}
-.dc-group:not(.now) .dc-bar { opacity:0.5; }
-
+.dc-bar { width:9px; border-radius:3px 3px 0 0; min-height:2px; transition:height 0.6s cubic-bezier(0.4,0,0.2,1); }
+.dc-lbl { position:absolute; bottom:-18px; font-size:9px; color:var(--ink3); left:50%; transform:translateX(-50%); white-space:nowrap; }
+.dc-lbl.now { color:var(--indigo); font-weight:700; }
+.dc-group.now::before { content:''; position:absolute; top:0; left:10%; right:10%; bottom:24px; background:rgba(79,70,229,0.05); border-radius:6px; }
+.dc-group:not(.now) .dc-bar { opacity:0.4; }
 .yr-legend { display:flex; gap:14px; margin-top:14px; flex-wrap:wrap; }
-.yl { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--t2); }
+.yl { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--ink3); }
 .yldot { width:7px; height:7px; border-radius:2px; }
 
-/* year month list */
-.yr-list { background:var(--d2); border-radius:var(--r); overflow:hidden; }
-.yr-row {
-  display:flex; align-items:center; padding:12px 14px; gap:12px;
-  border-bottom:1px solid var(--line);
-}
+.yr-list { background:var(--card); border-radius:var(--r); overflow:hidden; box-shadow:var(--sh-sm); }
+.yr-row { display:flex; align-items:center; padding:12px 14px; gap:12px; border-bottom:1px solid var(--line); }
 .yr-row:last-child { border-bottom:none; }
-.yr-row.now { background:var(--d3); }
-.yr-mo { font-family:'Inter',sans-serif; font-size:12px; font-weight:700; color:var(--t2); min-width:26px; }
-.yr-row.now .yr-mo { color:var(--gold); }
+.yr-row.now { background:var(--indigo-lt); }
+.yr-mo { font-family:'Inter',sans-serif; font-size:12px; font-weight:700; color:var(--ink3); min-width:26px; }
+.yr-row.now .yr-mo { color:var(--indigo); }
 .yr-bars { flex:1; display:flex; flex-direction:column; gap:3px; }
 .yr-br { display:flex; align-items:center; gap:5px; }
-.yr-b  { height:3px; border-radius:99px; min-width:2px; transition:width 0.4s; }
-.yr-bl { font-family:'Inter',sans-serif; font-size:9px; color:var(--t2); min-width:34px; text-align:right; }
+.yr-b { height:3px; border-radius:99px; min-width:2px; transition:width 0.4s; }
+.yr-bl { font-family:'Inter',sans-serif; font-size:9px; color:var(--ink3); min-width:34px; text-align:right; }
 .yr-sv { font-family:'Inter',sans-serif; font-size:13px; font-weight:700; letter-spacing:-0.4px; min-width:56px; text-align:right; }
 
-/* ── MODAL ── */
-.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:100; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); align-items:flex-end; justify-content:center; }
-.overlay.show { display:flex; }
-.modal { background:var(--d2); border-radius:22px 22px 0 0; padding:8px 20px 44px; width:100%; max-width:480px; border-top:1px solid var(--d4); }
-.modal-handle { width:36px; height:4px; border-radius:2px; background:var(--d4); margin:12px auto 20px; }
-.modal-title  { font-size:20px; font-weight:700; color:var(--t0); margin-bottom:20px; letter-spacing:-0.5px; }
-.modal-lbl    { font-size:10px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--t2); margin-bottom:7px; }
-.modal-input  {
-  width:100%; background:var(--d3); border:1.5px solid var(--d4);
-  border-radius:13px; padding:13px 15px;
-  font-family:'Inter',sans-serif; font-size:22px; font-weight:700; color:var(--t0);
-  outline:none; margin-bottom:16px; transition:border-color 0.15s;
-}
-.modal-input:focus { border-color:var(--gold); }
-.modal-input::placeholder { color:var(--t2); }
-.modal-btn {
-  width:100%; background:var(--gold); color:var(--d0);
-  border:none; border-radius:13px; padding:15px;
-  font-size:15px; font-weight:700; cursor:pointer; font-family:inherit;
-}
-.modal-btn:active { opacity:0.82; }
+/* ── SETUP SCREEN ── */
+.setup-wrap { padding:24px 16px; }
+.setup-hero { text-align:center; margin-bottom:28px; }
+.setup-icon { font-size:48px; margin-bottom:12px; }
+.setup-title { font-size:22px; font-weight:800; color:var(--ink); letter-spacing:-0.5px; margin-bottom:6px; }
+.setup-desc  { font-size:14px; color:var(--ink2); line-height:1.6; }
 
-.empty { text-align:center; padding:22px; font-size:13px; color:var(--t2); }
+.setup-card { background:var(--card); border-radius:var(--r); padding:20px; box-shadow:var(--sh); margin-bottom:12px; }
+.setup-card-title { font-size:14px; font-weight:700; color:var(--ink); margin-bottom:4px; }
+.setup-card-desc  { font-size:12px; color:var(--ink3); margin-bottom:16px; line-height:1.5; }
+
+.field { margin-bottom:14px; }
+.field-lbl { font-size:10px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--ink3); margin-bottom:6px; }
+.field-input {
+  width:100%; background:var(--bg); border:1.5px solid var(--line);
+  border-radius:12px; padding:12px 14px; font-size:15px; color:var(--ink);
+  font-family:inherit; outline:none; transition:border-color 0.15s;
+}
+.field-input:focus { border-color:var(--indigo); }
+.field-input::placeholder { color:var(--ink3); }
+
+.btn-primary { width:100%; background:var(--indigo); color:#fff; border:none; border-radius:13px; padding:15px; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; margin-bottom:8px; transition:opacity 0.15s; }
+.btn-primary:active { opacity:0.85; }
+.btn-secondary { width:100%; background:var(--bg2); color:var(--ink2); border:none; border-radius:13px; padding:14px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; }
+
+.setup-hint { font-size:12px; color:var(--ink3); margin-top:10px; line-height:1.5; text-align:center; }
+.setup-hint a { color:var(--indigo); text-decoration:none; }
+.setup-hint strong { color:var(--coral); }
+
+/* ── MODAL ── */
+.overlay { display:none; position:fixed; inset:0; background:rgba(27,23,48,0.5); z-index:100; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); align-items:flex-end; justify-content:center; }
+.overlay.show { display:flex; }
+.modal { background:var(--card); border-radius:22px 22px 0 0; padding:8px 20px 44px; width:100%; max-width:480px; }
+.modal-handle { width:36px; height:4px; border-radius:2px; background:var(--line); margin:12px auto 20px; }
+.modal-title  { font-size:20px; font-weight:700; color:var(--ink); margin-bottom:20px; letter-spacing:-0.5px; }
+.modal-lbl    { font-size:10px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--ink3); margin-bottom:7px; }
+.modal-input  { width:100%; background:var(--bg); border:1.5px solid var(--line); border-radius:13px; padding:13px 15px; font-family:'Inter',sans-serif; font-size:22px; font-weight:700; color:var(--ink); outline:none; margin-bottom:16px; transition:border-color 0.15s; }
+.modal-input:focus { border-color:var(--indigo); }
+.modal-input::placeholder { color:var(--ink3); }
+.modal-btn { width:100%; background:var(--indigo); color:#fff; border:none; border-radius:13px; padding:15px; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; }
+.modal-btn:active { opacity:0.85; }
+
+.empty { text-align:center; padding:22px; font-size:13px; color:var(--ink3); }
 input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
+
+/* toast */
+.toast { position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; padding:10px 20px; border-radius:99px; font-size:13px; font-weight:600; z-index:200; opacity:0; transition:opacity 0.3s; white-space:nowrap; pointer-events:none; }
+.toast.show { opacity:1; }
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
-<div class="header">
+<div class="header" id="mainHeader" style="display:none">
   <div>
     <div class="brand-name">영준 &amp; 원지 💑</div>
     <div class="brand-sub">Family Budget</div>
+    <div class="sync-indicator">
+      <div class="sync-dot off" id="syncDot"></div>
+      <span id="syncText">연결 중...</span>
+    </div>
   </div>
   <div class="mpill">
     <button class="mpill-btn" onclick="chM(-1)">‹</button>
@@ -412,173 +359,147 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
   </div>
 </div>
 
-<!-- ══ HOME ══ -->
-<div class="page active content" id="page-home">
-
-  <div class="hero">
-    <button class="hero-goal-btn" onclick="openGoal()">목표 설정</button>
-    <div class="hero-eyebrow">누적 저축</div>
-    <div class="hero-num" id="hAmt">0<span class="unit">만원</span></div>
-    <div class="hero-meta">
-      <span class="hero-sub">목표 달성률</span>
-      <span class="hero-pct" id="hPct">0%</span>
+<!-- ══ SETUP SCREEN ══ -->
+<div id="setupScreen">
+  <div class="setup-wrap">
+    <div class="setup-hero">
+      <div class="setup-icon">💑</div>
+      <div class="setup-title">영준 &amp; 원지 가계부</div>
+      <div class="setup-desc">Supabase를 연결하면 아이폰, 아이패드, 노트북<br>모든 기기에서 데이터가 자동 동기화돼요.</div>
     </div>
-    <div class="track-bg"><div class="track-fill" id="hTrack" style="width:0%"></div></div>
-    <div class="hero-stats">
-      <div class="hst"><div class="hst-val" id="hGoal">—</div><div class="hst-lbl">목표 금액</div></div>
-      <div class="hst"><div class="hst-val" id="hRemain">—</div><div class="hst-lbl">남은 금액</div></div>
-      <div class="hst"><div class="hst-val" id="hMsave">—</div><div class="hst-lbl">이달 저축</div></div>
-    </div>
-  </div>
 
-  <div class="tile-row">
-    <div class="tile">
-      <div class="tile-dot-row"><div class="dot" style="background:var(--gold)"></div><div class="tile-lbl">이달 저축</div></div>
-      <div class="tile-val" id="tSave">0<span class="u">만원</span></div>
-      <div class="tile-sub">수입 − 지출</div>
-    </div>
-    <div class="tile">
-      <div class="tile-dot-row"><div class="dot" style="background:var(--blue)"></div><div class="tile-lbl">누적 저축</div></div>
-      <div class="tile-val" id="tCumul">0<span class="u">만원</span></div>
-      <div class="tile-sub">전체 합산</div>
-    </div>
-  </div>
-
-  <div class="slbl">이달 특이사항</div>
-  <div class="note-card" id="homeNote">
-    <div class="note-month" id="homeNoteMonth"></div>
-    <div class="note-empty">기록된 특이사항이 없습니다</div>
-  </div>
-</div>
-
-<!-- ══ INPUT ══ -->
-<div class="page content" id="page-input">
-
-  <div class="slbl" style="margin-top:0">이달 수입</div>
-  <div class="income-card">
-    <div class="inc-row">
-      <div class="av av-m">💼</div>
-      <div><div class="inc-who">영준 월급</div><div class="inc-desc">이달 수령액</div></div>
-      <div class="inc-right">
-        <input type="number" class="inc-num" id="myIncome" placeholder="0" oninput="save()">
-        <span class="inc-unit">만</span>
+    <div class="setup-card">
+      <div class="setup-card-title">🔗 Supabase 연결</div>
+      <div class="setup-card-desc">
+        1. <a href="https://supabase.com" target="_blank" style="color:var(--indigo)">supabase.com</a> 에서 무료 프로젝트 생성<br>
+        2. Settings → API → Project URL &amp; anon key 복사<br>
+        3. SQL Editor에서 아래 테이블 생성 후 입력
       </div>
-    </div>
-    <div class="inc-row">
-      <div class="av av-g">💕</div>
-      <div><div class="inc-who">원지 월급</div><div class="inc-desc">이달 수령액</div></div>
-      <div class="inc-right">
-        <input type="number" class="inc-num g" id="wifeIncome" placeholder="0" oninput="save()">
-        <span class="inc-unit">만</span>
+
+      <div class="field">
+        <div class="field-lbl">Project URL</div>
+        <input class="field-input" id="cfgUrl" placeholder="https://xxxx.supabase.co" type="url">
       </div>
-    </div>
-  </div>
+      <div class="field">
+        <div class="field-lbl">Anon Key</div>
+        <input class="field-input" id="cfgKey" placeholder="eyJ..." type="password">
+      </div>
+      <div class="field">
+        <div class="field-lbl">사용자 ID (기기 구분용, 예: youngjun)</div>
+        <input class="field-input" id="cfgUser" placeholder="youngjun" maxlength="30">
+      </div>
 
-  <div class="slbl">지출 내역</div>
-  <div class="exp-card">
-    <div class="exp-head">
-      <div class="exp-head-l"><span class="exp-title">고정 지출</span><span class="exp-badge eb-c">Fixed</span></div>
-      <span class="exp-sum" id="fixedSum">0 만</span>
+      <button class="btn-primary" onclick="saveConfig()">연결하기</button>
+      <button class="btn-secondary" onclick="showSqlGuide()">SQL 테이블 생성 코드 보기</button>
+      <div class="setup-hint" id="setupHint"></div>
     </div>
-    <div class="exp-list" id="fixedItems"></div>
-    <button class="add-btn" onclick="addItem('fixed')">＋ 항목 추가</button>
-  </div>
-  <div class="exp-card">
-    <div class="exp-head">
-      <div class="exp-head-l"><span class="exp-title">변동 지출</span><span class="exp-badge eb-g">Variable</span></div>
-      <span class="exp-sum" id="variableSum">0 만</span>
-    </div>
-    <div class="exp-list" id="variableItems"></div>
-    <button class="add-btn" onclick="addItem('variable')">＋ 항목 추가</button>
-  </div>
 
-  <div class="slbl">이달 특이사항</div>
-  <div class="note-input-card">
-    <div class="note-input-label">📝 메모</div>
-    <textarea class="note-textarea" id="noteInput" placeholder="이번 달 특별한 지출, 수입, 메모를 자유롭게 기록하세요" oninput="saveNote()"></textarea>
+    <div class="setup-card" id="sqlGuideCard" style="display:none">
+      <div class="setup-card-title">📋 SQL 테이블 생성</div>
+      <div class="setup-card-desc">Supabase → SQL Editor에 붙여넣고 실행하세요.</div>
+      <textarea class="field-input" readonly style="min-height:160px;font-size:11px;font-family:monospace;line-height:1.5" id="sqlCode"></textarea>
+      <button class="btn-secondary" onclick="copySql()" style="margin-top:8px">복사하기</button>
+    </div>
   </div>
 </div>
 
-<!-- ══ STATS ══ -->
-<div class="page content" id="page-stats">
+<!-- ══ MAIN APP ══ -->
+<div id="mainApp" style="display:none">
 
-  <div class="stat-tabs">
-    <div class="stat-tab on" id="stab-month" onclick="switchStat('month')">월간 통계</div>
-    <div class="stat-tab" id="stab-year" onclick="switchStat('year')">연간 통계</div>
+  <!-- HOME -->
+  <div class="page active content" id="page-home">
+    <div class="hero">
+      <button class="hero-goal-btn" onclick="openGoal()">목표 설정</button>
+      <div class="hero-eyebrow">누적 저축</div>
+      <div class="hero-num" id="hAmt">0<span class="unit">만원</span></div>
+      <div class="hero-meta">
+        <span class="hero-sub">목표 달성률</span>
+        <span class="hero-pct" id="hPct">0%</span>
+      </div>
+      <div class="track-bg"><div class="track-fill" id="hTrack" style="width:0%"></div></div>
+      <div class="hero-stats">
+        <div class="hst"><div class="hst-val" id="hGoal">—</div><div class="hst-lbl">목표 금액</div></div>
+        <div class="hst"><div class="hst-val" id="hRemain">—</div><div class="hst-lbl">남은 금액</div></div>
+        <div class="hst"><div class="hst-val" id="hMsave">—</div><div class="hst-lbl">이달 저축</div></div>
+      </div>
+    </div>
+    <div class="tile-row">
+      <div class="tile"><div class="tile-tag tag-amber">이달 저축</div><div class="tile-val" id="tSave">0<span class="u">만원</span></div><div class="tile-sub">수입 − 지출</div></div>
+      <div class="tile"><div class="tile-tag tag-sky">누적 저축</div><div class="tile-val" id="tCumul">0<span class="u">만원</span></div><div class="tile-sub">전체 합산</div></div>
+    </div>
+    <div class="slbl">이달 특이사항</div>
+    <div class="note-card" id="homeNote"><div class="note-month" id="homeNoteMonth"></div><div class="note-empty">기록된 특이사항이 없습니다</div></div>
   </div>
 
-  <!-- MONTH PANEL -->
-  <div class="stat-panel on" id="spanel-month">
-    <div class="mstat-grid">
-      <div class="mstat-card">
-        <div class="msc-lbl"><span style="color:var(--mint)">●</span> 총 수입</div>
-        <div class="msc-val" style="color:var(--mint)" id="msIncome">0 만</div>
-      </div>
-      <div class="mstat-card">
-        <div class="msc-lbl"><span style="color:var(--gold)">●</span> 총 저축</div>
-        <div class="msc-val" style="color:var(--gold)" id="msSave">0 만</div>
-      </div>
-      <div class="mstat-card">
-        <div class="msc-lbl"><span style="color:var(--coral)">●</span> 고정 지출</div>
-        <div class="msc-val" style="color:var(--coral)" id="msFixed">0 만</div>
-      </div>
-      <div class="mstat-card">
-        <div class="msc-lbl"><span style="color:var(--coral2)">●</span> 변동 지출</div>
-        <div class="msc-val" style="color:var(--coral2)" id="msVariable">0 만</div>
-      </div>
+  <!-- INPUT -->
+  <div class="page content" id="page-input">
+    <div class="slbl" style="margin-top:0">이달 수입</div>
+    <div class="income-card">
+      <div class="inc-row"><div class="av av-t">💼</div><div><div class="inc-who">영준 월급</div><div class="inc-desc">이달 수령액</div></div><div class="inc-right"><input type="number" class="inc-num" id="myIncome" placeholder="0" oninput="schedSave()"><span class="inc-unit">만</span></div></div>
+      <div class="inc-row"><div class="av av-i">💕</div><div><div class="inc-who">원지 월급</div><div class="inc-desc">이달 수령액</div></div><div class="inc-right"><input type="number" class="inc-num ind" id="wifeIncome" placeholder="0" oninput="schedSave()"><span class="inc-unit">만</span></div></div>
     </div>
-
-    <div class="mbar-card">
-      <div class="mbar-title">이달 수입 / 지출 구성</div>
-      <div class="hbar-wrap" id="monthBars">
-        <div class="empty">이달 데이터가 없습니다</div>
-      </div>
+    <div class="slbl">지출 내역</div>
+    <div class="exp-card">
+      <div class="exp-head"><div class="exp-head-l"><span class="exp-title">고정 지출</span><span class="exp-badge eb-c">Fixed</span></div><span class="exp-sum" id="fixedSum">0 만</span></div>
+      <div class="exp-list" id="fixedItems"></div>
+      <button class="add-btn" onclick="addItem('fixed')">＋ 항목 추가</button>
+    </div>
+    <div class="exp-card">
+      <div class="exp-head"><div class="exp-head-l"><span class="exp-title">변동 지출</span><span class="exp-badge eb-a">Variable</span></div><span class="exp-sum" id="variableSum">0 만</span></div>
+      <div class="exp-list" id="variableItems"></div>
+      <button class="add-btn" onclick="addItem('variable')">＋ 항목 추가</button>
+    </div>
+    <div class="slbl">이달 특이사항</div>
+    <div class="note-input-card">
+      <div class="note-input-label">📝 메모</div>
+      <textarea class="note-textarea" id="noteInput" placeholder="이번 달 특별한 지출, 수입, 메모를 자유롭게 기록하세요" oninput="schedSave()"></textarea>
     </div>
   </div>
 
-  <!-- YEAR PANEL -->
-  <div class="stat-panel" id="spanel-year">
-
-    <div class="yr-nav">
-      <div><div class="yr-num" id="yrLabel">2026</div><div class="yr-sub">연간 통계</div></div>
-      <div class="yr-btns">
-        <button class="yr-btn" onclick="chY(-1)">‹</button>
-        <button class="yr-btn" onclick="chY(1)">›</button>
+  <!-- STATS -->
+  <div class="page content" id="page-stats">
+    <div class="stat-tabs">
+      <div class="stat-tab on" id="stab-month" onclick="switchStat('month')">월간 통계</div>
+      <div class="stat-tab" id="stab-year" onclick="switchStat('year')">연간 통계</div>
+    </div>
+    <div class="stat-panel on" id="spanel-month">
+      <div class="mstat-grid">
+        <div class="mstat-card"><div class="msc-lbl"><span style="color:var(--teal)">●</span> 총 수입</div><div class="msc-val" style="color:var(--teal)" id="msIncome">0 만</div></div>
+        <div class="mstat-card"><div class="msc-lbl"><span style="color:var(--amber)">●</span> 총 저축</div><div class="msc-val" style="color:var(--amber)" id="msSave">0 만</div></div>
+        <div class="mstat-card"><div class="msc-lbl"><span style="color:var(--coral)">●</span> 고정 지출</div><div class="msc-val" style="color:var(--coral)" id="msFixed">0 만</div></div>
+        <div class="mstat-card"><div class="msc-lbl"><span style="color:var(--coral2)">●</span> 변동 지출</div><div class="msc-val" style="color:var(--coral2)" id="msVariable">0 만</div></div>
+      </div>
+      <div class="mbar-card">
+        <div class="mbar-title">이달 수입 / 지출 구성</div>
+        <div class="hbar-wrap" id="monthBars"><div class="empty">이달 데이터가 없습니다</div></div>
       </div>
     </div>
-
-    <div class="cumul-card">
-      <div class="cumul-eyebrow">전체 누적 저축</div>
-      <div class="cumul-row">
-        <div><div class="cumul-num" id="cAmt">0<span class="cumul-unit"> 만원</span></div></div>
-        <div style="text-align:right"><span class="cumul-pct" id="cPct">0</span><span class="cumul-pct-sign">%</span></div>
+    <div class="stat-panel" id="spanel-year">
+      <div class="yr-nav"><div><div class="yr-num" id="yrLabel">2026</div><div class="yr-sub">연간 통계</div></div><div class="yr-btns"><button class="yr-btn" onclick="chY(-1)">‹</button><button class="yr-btn" onclick="chY(1)">›</button></div></div>
+      <div class="cumul-card">
+        <div class="cumul-eyebrow">전체 누적 저축</div>
+        <div class="cumul-row"><div><div class="cumul-num" id="cAmt">0<span class="cumul-unit"> 만원</span></div></div><div style="text-align:right"><span class="cumul-pct" id="cPct">0</span><span class="cumul-pct-sign">%</span></div></div>
+        <div id="cDelta"></div>
+        <div class="cumul-track" style="margin-top:12px"><div class="cumul-fill" id="cBar" style="width:0%"></div></div>
+        <div class="cumul-meta"><div class="cumul-meta-item">목표 <span class="cumul-meta-val" id="cGoal">—</span> 만원</div><div class="cumul-meta-item">남은 <span class="cumul-meta-val" id="cRemain">—</span> 만원</div></div>
       </div>
-      <div id="cDelta"></div>
-      <div class="cumul-track" style="margin-top:12px"><div class="cumul-fill" id="cBar" style="width:0%"></div></div>
-      <div class="cumul-meta">
-        <div class="cumul-meta-item">목표 <span class="cumul-meta-val" id="cGoal">—</span> 만원</div>
-        <div class="cumul-meta-item">남은 <span class="cumul-meta-val" id="cRemain">—</span> 만원</div>
+      <div class="yr-sum">
+        <div class="ys"><div class="ys-num" style="color:var(--teal)" id="ysInc">0</div><div class="ys-lbl">연간 수입</div></div>
+        <div class="ys"><div class="ys-num" style="color:var(--coral)" id="ysExp">0</div><div class="ys-lbl">연간 지출</div></div>
+        <div class="ys"><div class="ys-num" style="color:var(--amber)" id="ysSv">0</div><div class="ys-lbl">연간 저축</div></div>
       </div>
-    </div>
-
-    <div class="yr-sum">
-      <div class="ys"><div class="ys-num" style="color:var(--mint)" id="ysInc">0</div><div class="ys-lbl">연간 수입</div></div>
-      <div class="ys"><div class="ys-num" style="color:var(--coral)" id="ysExp">0</div><div class="ys-lbl">연간 지출</div></div>
-      <div class="ys"><div class="ys-num" style="color:var(--gold)" id="ysSv">0</div><div class="ys-lbl">연간 저축</div></div>
-    </div>
-
-    <div class="yr-chart-card">
-      <div class="yr-chart-title">월별 수입 · 지출 · 저축</div>
-      <div class="dot-chart" id="yrChart"></div>
-      <div class="yr-legend">
-        <div class="yl"><div class="yldot" style="background:var(--mint)"></div>수입</div>
-        <div class="yl"><div class="yldot" style="background:var(--coral)"></div>지출</div>
-        <div class="yl"><div class="yldot" style="background:var(--gold)"></div>저축</div>
+      <div class="yr-chart-card">
+        <div class="yr-chart-title">월별 수입 · 지출 · 저축</div>
+        <div class="dot-chart" id="yrChart"></div>
+        <div class="yr-legend">
+          <div class="yl"><div class="yldot" style="background:var(--teal)"></div>수입</div>
+          <div class="yl"><div class="yldot" style="background:var(--coral)"></div>지출</div>
+          <div class="yl"><div class="yldot" style="background:var(--amber)"></div>저축</div>
+        </div>
       </div>
+      <div class="slbl">월별 상세</div>
+      <div class="yr-list" id="yrList"><div class="empty">데이터가 없습니다</div></div>
     </div>
-
-    <div class="slbl">월별 상세</div>
-    <div class="yr-list" id="yrList"><div class="empty">데이터가 없습니다</div></div>
   </div>
 </div>
 
@@ -594,48 +515,287 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
 </div>
 
 <!-- BOTTOM NAV -->
-<div class="nav">
+<div class="nav" id="mainNav" style="display:none">
   <div class="ni on" id="ni-home" onclick="switchTab('home',this)"><div class="ni-icon">🏠</div><div class="ni-lbl">홈</div></div>
   <div class="ni" id="ni-input" onclick="switchTab('input',this)"><div class="ni-icon">✏️</div><div class="ni-lbl">입력</div></div>
   <div class="ni" id="ni-stats" onclick="switchTab('stats',this)"><div class="ni-icon">📊</div><div class="ni-lbl">통계</div></div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-const KEY='gb_v4';
-const gs=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{};}catch{return{};}};
-const ss=s=>localStorage.setItem(KEY,JSON.stringify(s));
-const mk=(y,m)=>`${y}-${String(m).padStart(2,'0')}`;
-const fmt=n=>Math.round(n||0).toLocaleString('ko-KR');
+/* ═══════════════════════════════════════
+   CONFIG
+═══════════════════════════════════════ */
+const CFG_KEY = 'gb_supabase_cfg';
 
-let cY,cM,sY; // current year/month, stat year
+function getCfg(){ try{ return JSON.parse(localStorage.getItem(CFG_KEY))||null; }catch{ return null; } }
+function setCfg(c){ localStorage.setItem(CFG_KEY, JSON.stringify(c)); }
 
-function md(key){
-  const s=gs();
-  if(!s[key])s[key]={myIncome:0,wifeIncome:0,fixed:[],variable:[],note:''};
-  return s[key];
+/* ═══════════════════════════════════════
+   SUPABASE CLIENT — PostgREST v12 호환
+═══════════════════════════════════════ */
+let SB_URL='', SB_KEY='', SB_USER='';
+
+function sbBase(extra={}){
+  return {
+    'apikey':        SB_KEY,
+    'Authorization': 'Bearer ' + SB_KEY,
+    'Content-Type':  'application/json',
+    'Accept':        'application/json',
+    ...extra
+  };
 }
 
-/* ── init ── */
-window.onload=()=>{
-  const now=new Date();
-  cY=now.getFullYear(); cM=now.getMonth()+1; sY=cY;
-  updLabel(); renderInput(); updateAll();
+async function sbGet(table, qs=''){
+  const url = `${SB_URL}/rest/v1/${table}${qs?'?'+qs:''}`;
+  const r = await fetch(url, { method:'GET', headers: sbBase() });
+  if(!r.ok){
+    let msg='';
+    try{ const j=await r.json(); msg=j.message||j.hint||j.error||JSON.stringify(j); }
+    catch{ msg=await r.text().catch(()=>`HTTP ${r.status}`); }
+    throw new Error(`[${r.status}] ${msg}`);
+  }
+  return r.json();
+}
+
+async function sbUpsert(table, data){
+  const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
+    method:  'POST',
+    headers: sbBase({ 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+    body:    JSON.stringify(data)
+  });
+  if(!r.ok){ const t=await r.text(); throw new Error(`[${r.status}] ${t}`); }
+}
+
+async function sbDelete(table, qs){
+  const r = await fetch(`${SB_URL}/rest/v1/${table}?${qs}`, {
+    method:  'DELETE',
+    headers: sbBase({ 'Prefer': 'return=minimal' })
+  });
+  if(!r.ok){ const t=await r.text(); throw new Error(`[${r.status}] ${t}`); }
+}
+
+// connection test — actual GET to budget_goal table
+async function sbPing(){
+  const r = await fetch(`${SB_URL}/rest/v1/budget_goal?select=id&limit=1`, {
+    method:  'GET',
+    headers: {
+      'apikey':        SB_KEY,
+      'Authorization': 'Bearer ' + SB_KEY,
+      'Accept':        'application/json'
+    }
+  });
+  if(!r.ok){
+    let msg = '';
+    try { const j = await r.json(); msg = j.message || j.hint || JSON.stringify(j); }
+    catch { msg = await r.text().catch(()=>''); }
+    throw new Error(`[${r.status}] ${msg}`);
+  }
+}
+
+/* ═══════════════════════════════════════
+   IN-MEMORY CACHE  (replaces localStorage)
+═══════════════════════════════════════ */
+let cache = {}; // { 'YYYY-MM': {myIncome,wifeIncome,fixed,variable,note}, 'goal': {amount} }
+
+function getCache(key){ return cache[key] || null; }
+function setCache(key, val){ cache[key] = val; }
+
+/* ═══════════════════════════════════════
+   SETUP SCREEN
+═══════════════════════════════════════ */
+const SQL = `-- 월별 가계부 데이터
+create table if not exists budget_months (
+  id         bigint generated always as identity primary key,
+  month_key  text not null,       -- 'YYYY-MM'
+  my_income  numeric default 0,
+  wife_income numeric default 0,
+  fixed_items jsonb default '[]',
+  variable_items jsonb default '[]',
+  note       text default '',
+  updated_at timestamptz default now(),
+  unique(month_key)
+);
+
+-- 목표 금액
+create table if not exists budget_goal (
+  id      bigint generated always as identity primary key,
+  amount  numeric default 0,
+  updated_at timestamptz default now()
+);
+
+-- Row Level Security 비활성화 (가족 공유용)
+alter table budget_months disable row level security;
+alter table budget_goal disable row level security;`;
+
+function showSqlGuide(){
+  document.getElementById('sqlCode').value = SQL;
+  document.getElementById('sqlGuideCard').style.display = 'block';
+}
+function copySql(){
+  navigator.clipboard.writeText(SQL).then(()=>toast('SQL 복사됨!')).catch(()=>{
+    document.getElementById('sqlCode').select();
+    document.execCommand('copy');
+    toast('SQL 복사됨!');
+  });
+}
+
+async function saveConfig(){
+  const url  = document.getElementById('cfgUrl').value.trim().replace(/\/+$/,'').replace(/\s/g,'');
+  const key  = document.getElementById('cfgKey').value.trim();
+  const user = document.getElementById('cfgUser').value.trim() || 'user';
+  const hint = document.getElementById('setupHint');
+
+  if(!url||!key){ hint.innerHTML='<strong>URL과 Key를 모두 입력해주세요.</strong>'; return; }
+  hint.textContent = '연결 테스트 중...';
+
+  SB_URL=url; SB_KEY=key; SB_USER=user;
+  try {
+    await sbPing();
+    setCfg({url,key,user});
+    hint.textContent = '✅ 연결 성공!';
+    setTimeout(()=>launchApp(), 600);
+  } catch(e){
+    console.error('saveConfig error:', e);
+    hint.innerHTML = `<strong>연결 실패:</strong> ${e.message}<br><small style="color:#888">URL 끝에 슬래시 없이 입력했는지, Legacy anon key인지 확인해주세요.</small>`;
+  }
+}
+
+/* ═══════════════════════════════════════
+   APP INIT
+═══════════════════════════════════════ */
+let cY, cM, sY, saveTimer=null;
+const fmt = n => Math.round(n||0).toLocaleString('ko-KR');
+const mk  = (y,m) => `${y}-${String(m).padStart(2,'0')}`;
+
+window.onload = async () => {
+  const cfg = getCfg();
+  if(cfg){
+    SB_URL=cfg.url; SB_KEY=cfg.key; SB_USER=cfg.user;
+    await launchApp();
+  } else {
+    document.getElementById('setupScreen').style.display='block';
+  }
 };
 
-/* ── month nav ── */
-function chM(d){
-  cM+=d;
-  if(cM>12){cM=1;cY++;}
-  if(cM<1){cM=12;cY--;}
-  sY=cY;
-  updLabel(); renderInput(); updateAll();
-  if(document.getElementById('page-stats').classList.contains('active')) renderStats();
-}
-function updLabel(){
-  document.getElementById('mLbl').textContent=`${cY}.${String(cM).padStart(2,'0')}`;
+async function launchApp(){
+  document.getElementById('setupScreen').style.display='none';
+  document.getElementById('mainApp').style.display='block';
+  document.getElementById('mainHeader').style.display='flex';
+  document.getElementById('mainNav').style.display='flex';
+
+  const now = new Date();
+  cY=now.getFullYear(); cM=now.getMonth()+1; sY=cY;
+  updLabel();
+  setSyncStatus('busy','데이터 불러오는 중...');
+  await loadAll();
+  renderInput(); updateAll();
+  setSyncStatus('ok','동기화됨');
 }
 
-/* ── tabs ── */
+/* ═══════════════════════════════════════
+   SUPABASE DATA OPS
+═══════════════════════════════════════ */
+async function loadAll(){
+  try {
+    const months = await sbGet('budget_months', 'select=*&order=month_key.asc');
+    months.forEach(row=>{
+      cache[row.month_key] = {
+        myIncome:   Number(row.my_income)   || 0,
+        wifeIncome: Number(row.wife_income) || 0,
+        fixed:      Array.isArray(row.fixed_items)    ? row.fixed_items    : (row.fixed_items    ? JSON.parse(row.fixed_items)    : []),
+        variable:   Array.isArray(row.variable_items) ? row.variable_items : (row.variable_items ? JSON.parse(row.variable_items) : []),
+        note:       row.note || ''
+      };
+    });
+    const goals = await sbGet('budget_goal', 'select=id,amount&order=id.desc&limit=1');
+    if(goals.length) cache['goal'] = { id: goals[0].id, amount: Number(goals[0].amount)||0 };
+  } catch(e){
+    console.error('loadAll:', e);
+    setSyncStatus('err', '불러오기 실패: '+e.message);
+  }
+}
+
+async function saveMonth(key){
+  const d = cache[key];
+  if(!d) return;
+  setSyncStatus('busy','저장 중...');
+  try {
+    await sbUpsert('budget_months', {
+      month_key:      key,
+      my_income:      d.myIncome,
+      wife_income:    d.wifeIncome,
+      fixed_items:    d.fixed,
+      variable_items: d.variable,
+      note:           d.note,
+      updated_at:     new Date().toISOString()
+    });
+    setSyncStatus('ok','저장됨 '+ new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}));
+  } catch(e){
+    setSyncStatus('err','저장 실패: '+e.message);
+  }
+}
+
+async function saveGoalToDB(amount){
+  setSyncStatus('busy','저장 중...');
+  try {
+    const existing = cache['goal'];
+    if(existing && existing.id){
+      // update existing row
+      const r = await fetch(`${SB_URL}/rest/v1/budget_goal?id=eq.${existing.id}`, {
+        method:'PATCH',
+        headers: sbBase({'Prefer':'return=minimal'}),
+        body: JSON.stringify({ amount, updated_at: new Date().toISOString() })
+      });
+      if(!r.ok){ const t=await r.text(); throw new Error(`[${r.status}] ${t}`); }
+    } else {
+      // insert first row
+      await sbUpsert('budget_goal', { amount, updated_at: new Date().toISOString() });
+      // reload to get the id
+      const goals = await sbGet('budget_goal','select=id,amount&order=id.desc&limit=1');
+      if(goals.length) cache['goal'] = { id: goals[0].id, amount };
+    }
+    setSyncStatus('ok','저장됨');
+  } catch(e){ setSyncStatus('err','저장 실패: '+e.message); }
+}
+
+/* ═══════════════════════════════════════
+   SYNC STATUS
+═══════════════════════════════════════ */
+function setSyncStatus(state, text){
+  const dot = document.getElementById('syncDot');
+  const txt = document.getElementById('syncText');
+  dot.className = 'sync-dot '+state;
+  txt.textContent = text;
+}
+
+/* ═══════════════════════════════════════
+   SCHEDULED SAVE (debounce 1.5s)
+═══════════════════════════════════════ */
+function schedSave(){
+  // update cache immediately
+  const key = mk(cY,cM);
+  if(!cache[key]) cache[key]={myIncome:0,wifeIncome:0,fixed:[],variable:[],note:''};
+  cache[key].myIncome   = parseFloat(document.getElementById('myIncome').value)||0;
+  cache[key].wifeIncome = parseFloat(document.getElementById('wifeIncome').value)||0;
+  cache[key].note       = document.getElementById('noteInput').value;
+  calcSums(); updateAll();
+  // debounce DB write
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>saveMonth(key), 1500);
+}
+
+/* ═══════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════ */
+function chM(d){
+  cM+=d; if(cM>12){cM=1;cY++;} if(cM<1){cM=12;cY--;}
+  sY=cY; updLabel(); renderInput(); updateAll();
+  if(document.getElementById('page-stats').classList.contains('active')) renderStats();
+}
+function updLabel(){ document.getElementById('mLbl').textContent=`${cY}.${String(cM).padStart(2,'0')}`; }
+
 function switchTab(name,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
@@ -643,18 +803,22 @@ function switchTab(name,el){
   el.classList.add('on');
   if(name==='stats'){sY=cY;document.getElementById('yrLabel').textContent=sY;renderStats();}
 }
-
-/* ── stat tabs ── */
 function switchStat(name){
   document.querySelectorAll('.stat-tab').forEach(t=>t.classList.remove('on'));
   document.querySelectorAll('.stat-panel').forEach(p=>p.classList.remove('on'));
   document.getElementById('stab-'+name).classList.add('on');
   document.getElementById('spanel-'+name).classList.add('on');
-  if(name==='year') renderYearPanel();
-  else renderMonthPanel();
+  if(name==='year') renderYearPanel(); else renderMonthPanel();
 }
 
-/* ── render input ── */
+/* ═══════════════════════════════════════
+   RENDER INPUT
+═══════════════════════════════════════ */
+function md(key){
+  if(!cache[key]) cache[key]={myIncome:0,wifeIncome:0,fixed:[],variable:[],note:''};
+  return cache[key];
+}
+
 function renderInput(){
   const d=md(mk(cY,cM));
   document.getElementById('myIncome').value=d.myIncome||'';
@@ -669,44 +833,30 @@ function renderItems(type,items){
   const c=document.getElementById(type+'Items'); c.innerHTML='';
   items.forEach((item,i)=>{
     const div=document.createElement('div'); div.className='exp-item';
-    div.innerHTML=`
-      <div class="exp-dot"></div>
-      <input class="exp-name" value="${item.name||''}" placeholder="항목명" oninput="upd('${type}',${i},'name',this.value)">
-      <input type="number" class="exp-amt" value="${item.amount||''}" placeholder="0" oninput="upd('${type}',${i},'amount',this.value)">
+    div.innerHTML=`<div class="exp-dot"></div>
+      <input class="exp-name" value="${item.name||''}" placeholder="항목명" oninput="updItem('${type}',${i},'name',this.value)">
+      <input type="number" class="exp-amt" value="${item.amount||''}" placeholder="0" oninput="updItem('${type}',${i},'amount',this.value)">
       <span class="exp-unit">만</span>
-      <button class="exp-del" onclick="del('${type}',${i})">✕</button>`;
+      <button class="exp-del" onclick="delItem('${type}',${i})">✕</button>`;
     c.appendChild(div);
   });
 }
 
 function addItem(type){
-  const s=gs(),key=mk(cY,cM);
-  if(!s[key])s[key]=md(key);
-  s[key][type].push({name:'',amount:0}); ss(s);
-  renderItems(type,s[key][type]); calcSums(); updateAll();
+  const key=mk(cY,cM); md(key)[type].push({name:'',amount:0});
+  renderItems(type,cache[key][type]); calcSums(); updateAll();
+  clearTimeout(saveTimer); saveTimer=setTimeout(()=>saveMonth(key),1500);
 }
-function del(type,idx){
-  const s=gs(),key=mk(cY,cM);
-  s[key][type].splice(idx,1); ss(s);
-  renderItems(type,s[key][type]); calcSums(); updateAll();
+function delItem(type,idx){
+  const key=mk(cY,cM); cache[key][type].splice(idx,1);
+  renderItems(type,cache[key][type]); calcSums(); updateAll();
+  clearTimeout(saveTimer); saveTimer=setTimeout(()=>saveMonth(key),1500);
 }
-function upd(type,idx,field,val){
-  const s=gs(),key=mk(cY,cM);
-  s[key][type][idx][field]=field==='amount'?(parseFloat(val)||0):val;
-  ss(s); calcSums(); updateAll();
-}
-function save(){
-  const s=gs(),key=mk(cY,cM);
-  if(!s[key])s[key]=md(key);
-  s[key].myIncome=parseFloat(document.getElementById('myIncome').value)||0;
-  s[key].wifeIncome=parseFloat(document.getElementById('wifeIncome').value)||0;
-  ss(s); calcSums(); updateAll();
-}
-function saveNote(){
-  const s=gs(),key=mk(cY,cM);
-  if(!s[key])s[key]=md(key);
-  s[key].note=document.getElementById('noteInput').value;
-  ss(s); updateHomeNote();
+function updItem(type,idx,field,val){
+  const key=mk(cY,cM);
+  cache[key][type][idx][field]=field==='amount'?(parseFloat(val)||0):val;
+  calcSums(); updateAll();
+  clearTimeout(saveTimer); saveTimer=setTimeout(()=>saveMonth(key),1500);
 }
 function calcSums(){
   const d=md(mk(cY,cM));
@@ -714,26 +864,27 @@ function calcSums(){
   document.getElementById('variableSum').textContent=fmt((d.variable||[]).reduce((a,b)=>a+(b.amount||0),0))+' 만';
 }
 
-/* ── calc ── */
+/* ═══════════════════════════════════════
+   CALCULATIONS
+═══════════════════════════════════════ */
 function sm(key){
   const d=md(key);
   const inc=(d.myIncome||0)+(d.wifeIncome||0);
   const fixed=(d.fixed||[]).reduce((a,b)=>a+(b.amount||0),0);
   const variable=(d.variable||[]).reduce((a,b)=>a+(b.amount||0),0);
-  const exp=fixed+variable;
-  return {inc,exp,fixed,variable,save:inc-exp,note:d.note||''};
+  return{inc,exp:fixed+variable,fixed,variable,save:inc-(fixed+variable),note:d.note||''};
 }
 function totalSaved(){
-  const s=gs();
-  return Object.keys(s).filter(k=>k!=='goal').reduce((a,k)=>{
-    const {inc,exp}=sm(k); return a+Math.max(0,inc-exp);
-  },0);
+  return Object.keys(cache).filter(k=>k!=='goal' && /^\d{4}-\d{2}$/.test(k))
+    .reduce((a,k)=>{const{inc,exp}=sm(k);return a+Math.max(0,inc-exp);},0);
 }
 
-/* ── update all ── */
+/* ═══════════════════════════════════════
+   UPDATE UI
+═══════════════════════════════════════ */
 function updateAll(){
-  const {inc,exp,save}=sm(mk(cY,cM));
-  const ts=totalSaved(), goal=gs().goal||0;
+  const{save}=sm(mk(cY,cM));
+  const ts=totalSaved(), goal=(cache['goal']||{}).amount||0;
   const pct=goal>0?Math.min(100,Math.round(ts/goal*100)):0;
 
   document.getElementById('hAmt').innerHTML=fmt(ts)+'<span class="unit">만원</span>';
@@ -744,14 +895,12 @@ function updateAll(){
   document.getElementById('hMsave').textContent=fmt(save);
   document.getElementById('tSave').innerHTML=fmt(save)+'<span class="u">만원</span>';
   document.getElementById('tCumul').innerHTML=fmt(ts)+'<span class="u">만원</span>';
-
   updateHomeNote();
 }
 
 function updateHomeNote(){
   const d=md(mk(cY,cM));
   const el=document.getElementById('homeNote');
-  document.getElementById('homeNoteMonth').textContent=`${cY}년 ${cM}월`;
   if(d.note&&d.note.trim()){
     el.innerHTML=`<div class="note-month">${cY}년 ${cM}월</div><div class="note-text">${d.note.trim()}</div>`;
   } else {
@@ -759,95 +908,66 @@ function updateHomeNote(){
   }
 }
 
-/* ── stats ── */
+/* ═══════════════════════════════════════
+   STATS
+═══════════════════════════════════════ */
 function renderStats(){
-  const activePanel=document.querySelector('.stat-panel.on');
-  if(activePanel&&activePanel.id==='spanel-month') renderMonthPanel();
-  else renderYearPanel();
+  const p=document.querySelector('.stat-panel.on');
+  if(p&&p.id==='spanel-month') renderMonthPanel(); else renderYearPanel();
 }
 
 function renderMonthPanel(){
-  const key=mk(cY,cM);
-  const {inc,exp,fixed,variable,save}=sm(key);
+  const{inc,exp,fixed,variable,save}=sm(mk(cY,cM));
   document.getElementById('msIncome').textContent=fmt(inc)+' 만';
   document.getElementById('msSave').textContent=fmt(save)+' 만';
   document.getElementById('msFixed').textContent=fmt(fixed)+' 만';
   document.getElementById('msVariable').textContent=fmt(variable)+' 만';
-
-  // horizontal bar chart
-  const items=[
-    {lbl:'수입',val:inc,color:'var(--mint)'},
-    {lbl:'고정',val:fixed,color:'var(--coral)'},
-    {lbl:'변동',val:variable,color:'var(--coral2)'},
-    {lbl:'저축',val:Math.max(0,save),color:'var(--gold)'},
-  ];
+  const items=[{lbl:'수입',val:inc,color:'var(--teal)'},{lbl:'고정',val:fixed,color:'var(--coral)'},{lbl:'변동',val:variable,color:'var(--coral2)'},{lbl:'저축',val:Math.max(0,save),color:'var(--amber)'}];
   const maxV=Math.max(...items.map(i=>i.val),1);
   const wrap=document.getElementById('monthBars');
   if(inc===0&&exp===0){wrap.innerHTML='<div class="empty">이달 데이터가 없습니다</div>';return;}
-  wrap.innerHTML=items.map(item=>`
-    <div class="hbar-row">
-      <div class="hbar-lbl">${item.lbl}</div>
-      <div class="hbar-track"><div class="hbar-fill" style="width:${Math.max(2,item.val/maxV*100)}%;background:${item.color}"></div></div>
-      <div class="hbar-val">${fmt(item.val)}</div>
-    </div>
-  `).join('');
+  wrap.innerHTML=items.map(it=>`<div class="hbar-row"><div class="hbar-lbl">${it.lbl}</div><div class="hbar-track"><div class="hbar-fill" style="width:${Math.max(2,it.val/maxV*100)}%;background:${it.color}"></div></div><div class="hbar-val">${fmt(it.val)}</div></div>`).join('');
 }
 
 function renderYearPanel(){
   document.getElementById('yrLabel').textContent=sY;
-  const goal=gs().goal||0, ts=totalSaved();
+  const goal=(cache['goal']||{}).amount||0, ts=totalSaved();
   const pct=goal>0?Math.min(100,Math.round(ts/goal*100)):0;
-
   document.getElementById('cAmt').innerHTML=fmt(ts)+'<span class="cumul-unit"> 만원</span>';
   document.getElementById('cPct').textContent=pct;
   document.getElementById('cBar').style.width=pct+'%';
   document.getElementById('cGoal').textContent=goal?fmt(goal):'—';
   document.getElementById('cRemain').textContent=goal?fmt(Math.max(0,goal-ts)):'—';
 
-  // delta vs prev month
   const prevM=cM===1?12:cM-1, prevY=cM===1?cY-1:cY;
-  const {save:thisSave}=sm(mk(cY,cM));
-  const {save:prevSave}=sm(mk(prevY,prevM));
+  const{save:thisSave}=sm(mk(cY,cM)), {save:prevSave}=sm(mk(prevY,prevM));
   const delta=thisSave-prevSave;
   const dEl=document.getElementById('cDelta');
-  if(thisSave!==0||prevSave!==0){
+  if(thisSave||prevSave){
     const cls=delta>0?'delta-up':delta<0?'delta-down':'delta-zero';
-    const sign=delta>0?'+':'';
-    dEl.innerHTML=`<span class="delta-badge ${cls}">${sign}${fmt(delta)}만원 전월 대비</span>`;
-  } else { dEl.innerHTML=''; }
+    dEl.innerHTML=`<span class="delta-badge ${cls}">${delta>0?'+':''}${fmt(delta)}만원 전월 대비</span>`;
+  } else dEl.innerHTML='';
 
-  // year data
   const months=Array.from({length:12},(_,i)=>({key:mk(sY,i+1),m:i+1,lbl:`${i+1}월`}));
   const sums=months.map(mo=>({...sm(mo.key),m:mo.m,lbl:mo.lbl}));
-
   document.getElementById('ysInc').textContent=fmt(sums.reduce((a,b)=>a+b.inc,0));
   document.getElementById('ysExp').textContent=fmt(sums.reduce((a,b)=>a+b.exp,0));
   document.getElementById('ysSv').textContent=fmt(sums.reduce((a,b)=>a+Math.max(0,b.save),0));
 
-  // bar chart
-  const maxV=Math.max(...sums.map(s=>Math.max(s.inc,s.exp,1)),1);
-  const H=110;
-  const chart=document.getElementById('yrChart');
-  chart.innerHTML='';
-  [33,66].forEach(p=>{
-    const g=document.createElement('div'); g.className='dot-guide';
-    g.style.bottom=(24+H*p/100)+'px'; chart.appendChild(g);
-  });
+  const maxV=Math.max(...sums.map(s=>Math.max(s.inc,s.exp,1)),1), H=110;
+  const chart=document.getElementById('yrChart'); chart.innerHTML='';
+  [33,66].forEach(p=>{const g=document.createElement('div');g.className='dot-guide';g.style.bottom=(24+H*p/100)+'px';chart.appendChild(g);});
   sums.forEach(s=>{
     const isCur=s.m===cM&&sY===cY;
     const g=document.createElement('div'); g.className='dc-group'+(isCur?' now':'');
     const bars=document.createElement('div'); bars.className='dc-bars';
-    [{h:s.inc/maxV*H,c:'var(--mint)'},{h:s.exp/maxV*H,c:'var(--coral)'},{h:Math.max(0,s.save)/maxV*H,c:'var(--gold)'}]
-      .forEach(b=>{
-        const el=document.createElement('div'); el.className='dc-bar';
-        el.style.height=Math.max(2,b.h)+'px'; el.style.background=b.c;
-        bars.appendChild(el);
-      });
+    [{h:s.inc/maxV*H,c:'var(--teal)'},{h:s.exp/maxV*H,c:'var(--coral)'},{h:Math.max(0,s.save)/maxV*H,c:'var(--amber)'}].forEach(b=>{
+      const el=document.createElement('div'); el.className='dc-bar'; el.style.height=Math.max(2,b.h)+'px'; el.style.background=b.c; bars.appendChild(el);
+    });
     const lbl=document.createElement('div'); lbl.className='dc-lbl'+(isCur?' now':''); lbl.textContent=s.lbl;
     g.appendChild(bars); g.appendChild(lbl); chart.appendChild(g);
   });
 
-  // month list
   const list=document.getElementById('yrList');
   const wd=sums.filter(s=>s.inc>0||s.exp>0);
   if(!wd.length){list.innerHTML=`<div class="empty">${sY}년 데이터가 없습니다</div>`;return;}
@@ -855,24 +975,38 @@ function renderYearPanel(){
   list.innerHTML=wd.map(s=>{
     const iW=Math.round(s.inc/maxI*100),eW=Math.round(s.exp/maxI*100);
     const isCur=s.m===cM&&sY===cY;
-    const sc=s.save>=0?'var(--mint)':'var(--coral)';
-    return `<div class="yr-row${isCur?' now':''}">
-      <div class="yr-mo">${s.lbl}</div>
-      <div class="yr-bars">
-        <div class="yr-br"><div class="yr-b" style="width:${iW}%;flex:1;max-width:${iW}%;background:var(--mint)"></div><span class="yr-bl">${fmt(s.inc)}</span></div>
-        <div class="yr-br"><div class="yr-b" style="width:${eW}%;flex:1;max-width:${eW}%;background:var(--coral)"></div><span class="yr-bl">${fmt(s.exp)}</span></div>
-      </div>
-      <div class="yr-sv" style="color:${sc}">${s.save>=0?'+':''}${fmt(s.save)}</div>
-    </div>`;
+    const sc=s.save>=0?'var(--teal)':'var(--coral)';
+    return`<div class="yr-row${isCur?' now':''}"><div class="yr-mo">${s.lbl}</div><div class="yr-bars"><div class="yr-br"><div class="yr-b" style="width:${iW}%;flex:1;max-width:${iW}%;background:var(--teal)"></div><span class="yr-bl">${fmt(s.inc)}</span></div><div class="yr-br"><div class="yr-b" style="width:${eW}%;flex:1;max-width:${eW}%;background:var(--coral)"></div><span class="yr-bl">${fmt(s.exp)}</span></div></div><div class="yr-sv" style="color:${sc}">${s.save>=0?'+':''}${fmt(s.save)}</div></div>`;
   }).join('');
 }
 
 function chY(d){ sY+=d; renderYearPanel(); }
 
-/* ── goal modal ── */
-function openGoal(){ document.getElementById('goalInput').value=gs().goal||''; document.getElementById('overlay').classList.add('show'); }
-function saveGoal(){ const s=gs(); s.goal=parseFloat(document.getElementById('goalInput').value)||0; ss(s); document.getElementById('overlay').classList.remove('show'); updateAll(); }
-document.getElementById('overlay').addEventListener('click',function(e){ if(e.target===this)this.classList.remove('show'); });
+/* ═══════════════════════════════════════
+   GOAL
+═══════════════════════════════════════ */
+function openGoal(){
+  document.getElementById('goalInput').value=(cache['goal']||{}).amount||'';
+  document.getElementById('overlay').classList.add('show');
+}
+async function saveGoal(){
+  const amount=parseFloat(document.getElementById('goalInput').value)||0;
+  cache['goal']={amount};
+  document.getElementById('overlay').classList.remove('show');
+  updateAll();
+  await saveGoalToDB(amount);
+}
+document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');});
+
+/* ═══════════════════════════════════════
+   TOAST
+═══════════════════════════════════════ */
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2000);
+}
 </script>
 </body>
 </html>
+완료
