@@ -432,8 +432,8 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
   <div class="page content" id="page-input">
     <div class="slbl" style="margin-top:0">이달 수입</div>
     <div class="income-card">
-      <div class="inc-row"><div class="av av-t">💼</div><div><div class="inc-who">영준 월급</div><div class="inc-desc">이달 수령액</div></div><div class="inc-right"><input type="number" class="inc-num" id="myIncome" placeholder="0" oninput="schedSave()"><span class="inc-unit">만</span></div></div>
-      <div class="inc-row"><div class="av av-i">💕</div><div><div class="inc-who">원지 월급</div><div class="inc-desc">이달 수령액</div></div><div class="inc-right"><input type="number" class="inc-num ind" id="wifeIncome" placeholder="0" oninput="schedSave()"><span class="inc-unit">만</span></div></div>
+      <div class="inc-row"><div class="av av-t">💼</div><div><div class="inc-who">영준 월급</div><div class="inc-desc">이달 수령액</div></div><div class="inc-right"><input type="number" class="inc-num" id="myIncome" placeholder="3200000" oninput="schedSave()"><span class="inc-unit">원</span></div></div>
+      <div class="inc-row"><div class="av av-i">💕</div><div><div class="inc-who">원지 월급</div><div class="inc-desc">이달 수령액</div></div><div class="inc-right"><input type="number" class="inc-num ind" id="wifeIncome" placeholder="3200000" oninput="schedSave()"><span class="inc-unit">원</span></div></div>
     </div>
     <div class="slbl">지출 내역</div>
     <div class="exp-card">
@@ -505,8 +505,8 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">목표 저축 금액</div>
-    <div class="modal-lbl">금액 (만원)</div>
-    <input type="number" class="modal-input" id="goalInput" placeholder="3000">
+    <div class="modal-lbl">목표 금액 (원 단위로 입력)</div>
+    <input type="number" class="modal-input" id="goalInput" placeholder="50000000">
     <button class="modal-btn" onclick="saveGoal()">저장하기</button>
   </div>
 </div>
@@ -663,7 +663,16 @@ async function saveConfig(){
    APP INIT
 ═══════════════════════════════════════ */
 let cY, cM, sY, saveTimer=null;
-const fmt = n => Math.round(n||0).toLocaleString('ko-KR');
+// 원 단위 입력 → 만원 단위 표시 (소수점 1자리)
+const fmt = n => {
+  const v = Number(n)||0;
+  if(v === 0) return '0';
+  const man = v / 10000;
+  if(Number.isInteger(man)) return man.toLocaleString('ko-KR');
+  return parseFloat(man.toFixed(1)).toLocaleString('ko-KR');
+};
+// 원 단위 그대로 표시 (입력칸 레이블용)
+const fmtWon = n => Math.round(Number(n)||0).toLocaleString('ko-KR');
 const mk  = (y,m) => `${y}-${String(m).padStart(2,'0')}`;
 
 window.onload = async () => {
@@ -833,7 +842,7 @@ function renderItems(type,items){
     div.innerHTML=`<div class="exp-dot"></div>
       <input class="exp-name" value="${item.name||''}" placeholder="항목명" oninput="updItem('${type}',${i},'name',this.value)">
       <input type="number" class="exp-amt" value="${item.amount||''}" placeholder="0" oninput="updItem('${type}',${i},'amount',this.value)">
-      <span class="exp-unit">만</span>
+      <span class="exp-unit">원</span>
       <button class="exp-del" onclick="delItem('${type}',${i})">✕</button>`;
     c.appendChild(div);
   });
@@ -857,8 +866,8 @@ function updItem(type,idx,field,val){
 }
 function calcSums(){
   const d=md(mk(cY,cM));
-  document.getElementById('fixedSum').textContent=fmt((d.fixed||[]).reduce((a,b)=>a+(b.amount||0),0))+' 만';
-  document.getElementById('variableSum').textContent=fmt((d.variable||[]).reduce((a,b)=>a+(b.amount||0),0))+' 만';
+  document.getElementById('fixedSum').textContent=fmt((d.fixed||[]).reduce((a,b)=>a+(b.amount||0),0))+'만원';
+  document.getElementById('variableSum').textContent=fmt((d.variable||[]).reduce((a,b)=>a+(b.amount||0),0))+'만원';
 }
 
 /* ═══════════════════════════════════════
@@ -915,10 +924,10 @@ function renderStats(){
 
 function renderMonthPanel(){
   const{inc,exp,fixed,variable,save}=sm(mk(cY,cM));
-  document.getElementById('msIncome').textContent=fmt(inc)+' 만';
-  document.getElementById('msSave').textContent=fmt(save)+' 만';
-  document.getElementById('msFixed').textContent=fmt(fixed)+' 만';
-  document.getElementById('msVariable').textContent=fmt(variable)+' 만';
+  document.getElementById('msIncome').textContent=fmt(inc)+'만원';
+  document.getElementById('msSave').textContent=fmt(save)+'만원';
+  document.getElementById('msFixed').textContent=fmt(fixed)+'만원';
+  document.getElementById('msVariable').textContent=fmt(variable)+'만원';
   const items=[{lbl:'수입',val:inc,color:'var(--teal)'},{lbl:'고정',val:fixed,color:'var(--coral)'},{lbl:'변동',val:variable,color:'var(--coral2)'},{lbl:'저축',val:Math.max(0,save),color:'var(--amber)'}];
   const maxV=Math.max(...items.map(i=>i.val),1);
   const wrap=document.getElementById('monthBars');
