@@ -825,8 +825,30 @@ function schedSave(){
 ═══════════════════════════════════════ */
 function chM(d){
   cM+=d; if(cM>12){cM=1;cY++;} if(cM<1){cM=12;cY--;}
-  sY=cY; updLabel(); renderInput(); updateAll();
+  sY=cY; updLabel();
+  autoCarryFixed(); // 새 달로 이동시 고정지출 자동 복사
+  renderInput(); updateAll();
   if(document.getElementById('page-stats').classList.contains('active')) renderStats();
+}
+
+function autoCarryFixed(){
+  const key = mk(cY,cM);
+  if(!cache[key]) cache[key]={myIncome:0,wifeIncome:0,fixed:[],variable:[],note:''};
+  // 이미 고정지출이 있으면 복사 안 함
+  if(cache[key].fixed && cache[key].fixed.length > 0) return;
+  // 이전 달 중 고정지출 있는 가장 최근 달 찾기
+  const keys = Object.keys(cache)
+    .filter(k => /^\d{4}-\d{2}$/.test(k) && k < key)
+    .sort().reverse();
+  for(const k of keys){
+    if(cache[k] && cache[k].fixed && cache[k].fixed.length > 0){
+      cache[key].fixed = JSON.parse(JSON.stringify(cache[k].fixed));
+      // DB 저장
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(()=>saveMonth(key), 800);
+      break;
+    }
+  }
 }
 function updLabel(){ document.getElementById('mLbl').textContent=`${cY}.${String(cM).padStart(2,'0')}`; }
 
@@ -870,17 +892,6 @@ function getLatestFixed(){
 function renderInput(){
   const key = mk(cY,cM);
   const d = md(key);
-
-  // 고정지출이 없는 달이면 이전 달에서 자동 복사
-  if((!d.fixed || d.fixed.length === 0)){
-    const inherited = getLatestFixed();
-    if(inherited.length > 0){
-      cache[key].fixed = inherited;
-      // DB에도 저장
-      clearTimeout(saveTimer);
-      saveTimer = setTimeout(()=>saveMonth(key), 1500);
-    }
-  }
 
   document.getElementById('myIncome').value=d.myIncome?Number(d.myIncome).toLocaleString('ko-KR'):'';
   document.getElementById('wifeIncome').value=d.wifeIncome?Number(d.wifeIncome).toLocaleString('ko-KR'):'';
