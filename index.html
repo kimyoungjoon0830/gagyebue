@@ -175,7 +175,7 @@ body {
 .inc-who  { font-size:14px; font-weight:600; color:var(--ink); }
 .inc-desc { font-size:10px; color:var(--ink3); margin-top:1px; }
 .inc-right { display:flex; align-items:baseline; gap:3px; margin-left:auto; }
-.inc-num { font-family:'Inter',sans-serif; font-size:20px; font-weight:700; letter-spacing:-0.5px; background:none; border:none; outline:none; text-align:right; width:88px; color:var(--teal); }
+.inc-num { font-family:'Inter',sans-serif; font-size:17px; font-weight:700; letter-spacing:-0.5px; background:none; border:none; outline:none; text-align:right; width:130px; color:var(--teal); }
 .inc-num.ind { color:var(--indigo); }
 .inc-unit { font-size:11px; color:var(--ink3); }
 
@@ -742,16 +742,29 @@ async function saveMonth(key){
   const d = cache[key];
   if(!d) return;
   setSyncStatus('busy','저장 중...');
+  const body = {
+    month_key:      key,
+    my_income:      d.myIncome,
+    wife_income:    d.wifeIncome,
+    fixed_items:    d.fixed,
+    variable_items: d.variable,
+    note:           d.note,
+    updated_at:     new Date().toISOString()
+  };
   try {
-    await sbUpsert('budget_months', {
-      month_key:      key,
-      my_income:      d.myIncome,
-      wife_income:    d.wifeIncome,
-      fixed_items:    d.fixed,
-      variable_items: d.variable,
-      note:           d.note,
-      updated_at:     new Date().toISOString()
+    // Try PATCH first (update existing row)
+    const patchR = await fetch(`${SB_URL}/rest/v1/budget_months?month_key=eq.${encodeURIComponent(key)}`, {
+      method:  'PATCH',
+      headers: sbBase({ 'Prefer': 'return=minimal' }),
+      body:    JSON.stringify(body)
     });
+    if(patchR.status === 404 || patchR.headers.get('content-range') === '*/0') {
+      // Row doesn't exist yet, INSERT
+      await sbUpsert('budget_months', body);
+    } else if(!patchR.ok){
+      const t = await patchR.text();
+      throw new Error(`[${patchR.status}] ${t}`);
+    }
     setSyncStatus('ok','저장됨 '+ new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}));
   } catch(e){
     setSyncStatus('err','저장 실패: '+e.message);
