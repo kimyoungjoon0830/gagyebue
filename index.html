@@ -6,357 +6,263 @@
 <title>영준 & 원지 가계부</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
-
 :root {
-  /* ── backgrounds ── */
-  --bg:      #F7F5FF;   /* lavender-tinted white */
-  --bg2:     #EEEbFF;
-  --card:    #FFFFFF;
-  --card2:   #F9F8FF;
-  --line:    #E8E4F8;
-
-  /* ── ink ── */
-  --ink:     #1B1730;
-  --ink2:    #5A5478;
-  --ink3:    #9C96B8;
-
-  /* ── indigo — trust / primary ── */
-  --indigo:  #4F46E5;
-  --indigo2: #6D66F0;
-  --indigo-lt:#EEF0FF;
-
-  /* ── teal — income / positive ── */
-  --teal:    #0D9488;
-  --teal2:   #2DD4BF;
-  --teal-lt: #F0FDFA;
-
-  /* ── coral — expense ── */
-  --coral:   #F43F5E;
-  --coral2:  #FB7185;
-  --coral-lt:#FFF1F3;
-
-  /* ── amber — savings ── */
-  --amber:   #F59E0B;
-  --amber2:  #FCD34D;
-  --amber-lt:#FFFBEB;
-
-  /* ── sky — cumulative ── */
-  --sky:     #0284C7;
-  --sky-lt:  #F0F9FF;
-
-  --r:  18px;
-  --rs: 12px;
-  --sh: 0 1px 3px rgba(79,70,229,0.06), 0 4px 16px rgba(79,70,229,0.07);
-  --sh-sm: 0 1px 2px rgba(79,70,229,0.05), 0 2px 8px rgba(79,70,229,0.05);
+  --bg:#F7F5FF; --bg2:#EEEAFF; --card:#FFF; --card2:#F9F8FF; --line:#E8E4F8;
+  --ink:#1B1730; --ink2:#5A5478; --ink3:#9C96B8;
+  --indigo:#4F46E5; --indigo2:#6D66F0; --indigo-lt:#EEF0FF;
+  --teal:#0D9488; --teal2:#2DD4BF; --teal-lt:#F0FDFA;
+  --coral:#F43F5E; --coral2:#FB7185; --coral-lt:#FFF1F3;
+  --amber:#F59E0B; --amber2:#FCD34D; --amber-lt:#FFFBEB;
+  --sky:#0284C7; --sky-lt:#F0F9FF;
+  --r:18px; --rs:12px;
+  --sh:0 1px 3px rgba(79,70,229,.06),0 4px 16px rgba(79,70,229,.07);
+  --sh-sm:0 1px 2px rgba(79,70,229,.05),0 2px 8px rgba(79,70,229,.05);
 }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans KR','Inter',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding-bottom:88px;-webkit-font-smoothing:antialiased}
 
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-body {
-  font-family:'Noto Sans KR','Inter',sans-serif;
-  background:var(--bg); color:var(--ink);
-  min-height:100vh; padding-bottom:88px;
-  -webkit-font-smoothing:antialiased;
-}
+/* NAV */
+.nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--line);display:flex;padding:8px 0 24px;z-index:60;box-shadow:0 -2px 16px rgba(79,70,229,.08)}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0}
+.ni-icon{font-size:21px;opacity:.22;transition:opacity .15s}
+.ni-lbl{font-size:10px;color:var(--ink3);font-weight:600;transition:color .15s;letter-spacing:.2px}
+.ni.on .ni-icon{opacity:1}.ni.on .ni-lbl{color:var(--indigo)}
 
-/* ── BOTTOM NAV ── */
-.nav {
-  position:fixed; bottom:0; left:0; right:0;
-  background:rgba(255,255,255,0.97);
-  backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
-  border-top:1px solid var(--line);
-  display:flex; padding:8px 0 24px; z-index:60;
-  box-shadow:0 -2px 16px rgba(79,70,229,0.08);
-}
-.ni { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; padding:4px 0; }
-.ni-icon { font-size:21px; opacity:0.22; transition:opacity 0.15s; }
-.ni-lbl  { font-size:10px; color:var(--ink3); font-weight:600; transition:color 0.15s; letter-spacing:0.2px; }
-.ni.on .ni-icon { opacity:1; }
-.ni.on .ni-lbl  { color:var(--indigo); }
+/* HEADER */
+.header{background:var(--card);padding:52px 18px 14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50;border-bottom:1px solid var(--line);box-shadow:var(--sh-sm)}
+.brand-name{font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.4px}
+.brand-sub{font-size:10px;color:var(--ink3);letter-spacing:1.2px;text-transform:uppercase;margin-top:1px}
+.sync-row{display:flex;align-items:center;gap:5px;margin-top:2px}
+.sdot{width:6px;height:6px;border-radius:50%;flex-shrink:0;transition:background .3s}
+.sdot.ok{background:#22C55E;box-shadow:0 0 5px #22C55E}
+.sdot.off{background:var(--ink3)}
+.sdot.busy{background:var(--amber);animation:pulse 1s infinite}
+.sdot.err{background:var(--coral)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.stext{font-size:10px;color:var(--ink3)}
+.mpill{display:flex;align-items:center;gap:2px;background:var(--bg2);border-radius:12px;padding:4px;border:1.5px solid var(--line)}
+.mpill-btn{background:none;border:none;color:var(--ink2);width:28px;height:28px;border-radius:8px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.mpill-btn:active{background:var(--line)}
+.mpill-lbl{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:var(--ink);min-width:62px;text-align:center;letter-spacing:-.3px}
 
-/* ── HEADER ── */
-.header {
-  background:var(--card);
-  padding:52px 18px 14px;
-  display:flex; justify-content:space-between; align-items:center;
-  position:sticky; top:0; z-index:50;
-  border-bottom:1px solid var(--line);
-  box-shadow:var(--sh-sm);
-}
-.brand-name { font-size:16px; font-weight:700; color:var(--ink); letter-spacing:-0.4px; }
-.brand-sub  { font-size:10px; color:var(--ink3); letter-spacing:1.2px; text-transform:uppercase; margin-top:1px; }
+/* PAGES */
+.content{padding:16px}.page{display:none}.page.active{display:block}
 
-/* sync indicator */
-.sync-indicator {
-  display:flex; align-items:center; gap:5px;
-  font-size:10px; color:var(--ink3); margin-top:2px;
-}
-.sync-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; transition:background 0.3s; }
-.sync-dot.ok   { background:#22C55E; box-shadow:0 0 5px #22C55E; }
-.sync-dot.off  { background:var(--ink3); }
-.sync-dot.busy { background:var(--amber); animation:pulse 1s infinite; }
-.sync-dot.err  { background:var(--coral); }
-@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+/* HERO */
+.hero{background:linear-gradient(135deg,#4F46E5 0%,#7C3AED 50%,#6D28D9 100%);border-radius:var(--r);padding:24px 22px 22px;margin-bottom:10px;position:relative;overflow:hidden;isolation:isolate}
+.hero::before{content:'';position:absolute;top:-60px;right:-40px;width:200px;height:200px;background:radial-gradient(circle,rgba(255,255,255,.10) 0%,transparent 65%);pointer-events:none;z-index:0}
+.hero::after{content:'';position:absolute;bottom:-30px;left:-10px;width:150px;height:150px;background:radial-gradient(circle,rgba(45,212,191,.15) 0%,transparent 65%);pointer-events:none;z-index:0}
+.hero>*{position:relative;z-index:1}
+.hero-ey{font-size:10px;font-weight:600;letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:4px}
+.hero-num{font-family:'Inter',sans-serif;font-size:50px;font-weight:900;letter-spacing:-3px;line-height:1;color:#fff;margin-bottom:4px}
+.hero-num .u{font-size:18px;font-weight:300;letter-spacing:0;color:rgba(255,255,255,.5);margin-left:2px}
+.hero-meta{display:flex;align-items:center;gap:8px;margin-bottom:18px}
+.hero-sub{font-size:12px;color:rgba(255,255,255,.5)}
+.hero-pct{font-family:'Inter',sans-serif;font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,.2);padding:2px 10px;border-radius:99px}
+.track-bg{height:5px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;margin-bottom:18px}
+.track-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#2DD4BF,#A78BFA);transition:width 1s cubic-bezier(.4,0,.2,1)}
+.hero-stats{display:flex}
+.hst{flex:1;padding-right:14px;margin-right:14px;border-right:1px solid rgba(255,255,255,.15)}
+.hst:last-child{border-right:none;padding-right:0;margin-right:0}
+.hst-val{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:rgba(255,255,255,.9)}
+.hst-lbl{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}
+.hero-goal-btn{position:absolute;top:20px;right:18px;background:rgba(255,255,255,.15);border:none;border-radius:99px;padding:5px 12px;font-size:11px;font-weight:500;color:rgba(255,255,255,.7);cursor:pointer;font-family:inherit;z-index:2}
 
-.mpill {
-  display:flex; align-items:center; gap:2px;
-  background:var(--bg2); border-radius:12px; padding:4px;
-  border:1.5px solid var(--line);
-}
-.mpill-btn { background:none; border:none; color:var(--ink2); width:28px; height:28px; border-radius:8px; font-size:15px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.mpill-btn:active { background:var(--line); }
-.mpill-lbl { font-family:'Inter',sans-serif; font-size:13px; font-weight:700; color:var(--ink); min-width:62px; text-align:center; letter-spacing:-0.3px; }
+/* TILES */
+.tile-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.tile{background:var(--card);border-radius:var(--rs);padding:14px;box-shadow:var(--sh-sm)}
+.tile-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;margin-bottom:8px;letter-spacing:.3px}
+.tag-amber{background:var(--amber-lt);color:var(--amber)}
+.tag-sky{background:var(--sky-lt);color:var(--sky)}
+.tile-val{font-family:'Inter',sans-serif;font-size:19px;font-weight:700;letter-spacing:-.8px;color:var(--ink)}
+.tile-val .u{font-size:11px;font-weight:400;color:var(--ink3)}
+.tile-sub{font-size:10px;color:var(--ink3);margin-top:3px}
 
-/* ── PAGES ── */
-.content { padding:16px; }
-.page { display:none; }
-.page.active { display:block; }
+/* SECTION LABEL */
+.slbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);margin:16px 0 8px}
 
-/* ── HERO ── */
-.hero {
-  background:linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #6D28D9 100%);
-  border-radius:var(--r); padding:24px 22px 22px;
-  margin-bottom:10px; position:relative; overflow:hidden;
-  isolation:isolate;
-}
-.hero::before {
-  content:''; position:absolute; top:-60px; right:-40px;
-  width:200px; height:200px;
-  background:radial-gradient(circle,rgba(255,255,255,0.10) 0%,transparent 65%);
-  pointer-events:none; z-index:0;
-}
-.hero::after {
-  content:''; position:absolute; bottom:-30px; left:-10px;
-  width:150px; height:150px;
-  background:radial-gradient(circle,rgba(45,212,191,0.15) 0%,transparent 65%);
-  pointer-events:none; z-index:0;
-}
-.hero > * { position:relative; z-index:1; }
-.hero-eyebrow { font-size:10px; font-weight:600; letter-spacing:1.8px; text-transform:uppercase; color:rgba(255,255,255,0.5); margin-bottom:4px; }
-.hero-num { font-family:'Inter',sans-serif; font-size:50px; font-weight:900; letter-spacing:-3px; line-height:1; color:#fff; margin-bottom:4px; }
-.hero-num .unit { font-size:18px; font-weight:300; letter-spacing:0; color:rgba(255,255,255,0.5); margin-left:2px; }
-.hero-meta { display:flex; align-items:center; gap:8px; margin-bottom:18px; }
-.hero-sub { font-size:12px; color:rgba(255,255,255,0.5); }
-.hero-pct { font-family:'Inter',sans-serif; font-size:12px; font-weight:700; color:#fff; background:rgba(255,255,255,0.2); padding:2px 10px; border-radius:99px; }
-.track-bg { height:5px; background:rgba(255,255,255,0.15); border-radius:99px; overflow:hidden; margin-bottom:18px; }
-.track-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,#2DD4BF,#A78BFA); transition:width 1s cubic-bezier(0.4,0,0.2,1); }
-.hero-stats { display:flex; }
-.hst { flex:1; padding-right:14px; margin-right:14px; border-right:1px solid rgba(255,255,255,0.15); }
-.hst:last-child { border-right:none; padding-right:0; margin-right:0; }
-.hst-val { font-family:'Inter',sans-serif; font-size:14px; font-weight:700; color:rgba(255,255,255,0.9); }
-.hst-lbl { font-size:10px; color:rgba(255,255,255,0.4); margin-top:2px; }
-.hero-goal-btn { position:absolute; top:20px; right:18px; background:rgba(255,255,255,0.15); border:none; border-radius:99px; padding:5px 12px; font-size:11px; font-weight:500; color:rgba(255,255,255,0.7); cursor:pointer; font-family:inherit; }
+/* NOTE */
+.note-card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:10px;box-shadow:var(--sh-sm);min-height:80px}
+.note-month{font-size:11px;color:var(--ink3);margin-bottom:7px;font-weight:600}
+.note-text{font-size:14px;color:var(--ink2);line-height:1.65;white-space:pre-wrap}
+.note-empty{font-size:13px;color:var(--ink3);font-style:italic}
 
-/* ── TILES ── */
-.tile-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; }
-.tile { background:var(--card); border-radius:var(--rs); padding:14px; box-shadow:var(--sh-sm); }
-.tile-tag { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:700; padding:3px 8px; border-radius:6px; margin-bottom:8px; letter-spacing:0.3px; }
-.tag-amber  { background:var(--amber-lt); color:var(--amber); }
-.tag-sky    { background:var(--sky-lt); color:var(--sky); }
-.tile-val { font-family:'Inter',sans-serif; font-size:19px; font-weight:700; letter-spacing:-0.8px; color:var(--ink); }
-.tile-val .u { font-size:11px; font-weight:400; color:var(--ink3); }
-.tile-sub { font-size:10px; color:var(--ink3); margin-top:3px; }
+/* INPUT */
+.income-card{background:var(--card);border-radius:var(--r);overflow:hidden;margin-bottom:10px;box-shadow:var(--sh-sm)}
+.inc-row{display:flex;align-items:center;padding:15px 16px;gap:12px;border-bottom:1px solid var(--line)}
+.inc-row:last-child{border-bottom:none}
+.av{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.av-t{background:var(--teal-lt)}.av-i{background:var(--indigo-lt)}
+.inc-who{font-size:14px;font-weight:600;color:var(--ink)}
+.inc-desc{font-size:10px;color:var(--ink3);margin-top:1px}
+.inc-right{display:flex;align-items:baseline;gap:3px;margin-left:auto}
+.inc-num{font-family:'Inter',sans-serif;font-size:17px;font-weight:700;letter-spacing:-.5px;background:none;border:none;outline:none;text-align:right;width:140px;color:var(--teal)}
+.inc-num.ind{color:var(--indigo)}
+.inc-unit{font-size:11px;color:var(--ink3)}
 
-/* ── SECTION LABEL ── */
-.slbl { font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--ink3); margin:16px 0 8px; }
+.exp-card{background:var(--card);border-radius:var(--r);overflow:hidden;margin-bottom:10px;box-shadow:var(--sh-sm)}
+.exp-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--card2);border-bottom:1px solid var(--line)}
+.exp-head-l{display:flex;align-items:center;gap:7px}
+.exp-title{font-size:13px;font-weight:700;color:var(--ink)}
+.exp-badge{font-size:10px;font-weight:600;padding:2px 7px;border-radius:6px}
+.eb-c{background:var(--coral-lt);color:var(--coral)}
+.eb-a{background:var(--amber-lt);color:var(--amber)}
+.exp-sum{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;color:var(--coral)}
+.carry-badge{font-size:10px;color:var(--indigo);background:var(--indigo-lt);padding:2px 7px;border-radius:6px;margin-left:6px}
+.exp-list{padding:3px 0 4px}
+.exp-item{display:flex;align-items:center;padding:10px 16px;gap:9px;border-bottom:1px solid var(--line)}
+.exp-item:last-child{border-bottom:none}
+.exp-dot{width:5px;height:5px;border-radius:50%;border:1.5px solid var(--ink3);flex-shrink:0}
+.exp-name{flex:1;font-size:13px;color:var(--ink2);background:none;border:none;outline:none;font-family:inherit;min-width:0}
+.exp-name::placeholder{color:var(--ink3)}
+.exp-amt{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--ink);background:none;border:none;outline:none;font-family:inherit;text-align:right;width:100px}
+.exp-amt::placeholder{color:var(--ink3)}
+.exp-unit{font-size:10px;color:var(--ink3);flex-shrink:0}
+.exp-del{width:20px;height:20px;border-radius:5px;background:var(--coral-lt);border:none;color:var(--coral);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.add-btn{margin:5px 12px 10px;display:flex;align-items:center;justify-content:center;gap:5px;background:none;border:1.5px dashed var(--line);border-radius:11px;padding:9px;color:var(--ink3);font-size:12px;font-weight:500;cursor:pointer;width:calc(100% - 24px);font-family:inherit}
+.add-btn:active{border-color:var(--indigo);color:var(--indigo)}
 
-/* ── NOTE CARD ── */
-.note-card { background:var(--card); border-radius:var(--r); padding:16px; margin-bottom:10px; box-shadow:var(--sh-sm); min-height:80px; }
-.note-month { font-size:11px; color:var(--ink3); margin-bottom:7px; font-weight:600; }
-.note-text  { font-size:14px; color:var(--ink2); line-height:1.65; white-space:pre-wrap; }
-.note-empty { font-size:13px; color:var(--ink3); font-style:italic; }
+.note-input-card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:10px;box-shadow:var(--sh-sm)}
+.note-input-label{font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.8px;text-transform:uppercase;margin-bottom:10px}
+.note-textarea{width:100%;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font-size:14px;color:var(--ink);font-family:inherit;line-height:1.6;outline:none;resize:none;min-height:90px;transition:border-color .15s}
+.note-textarea:focus{border-color:var(--indigo)}
+.note-textarea::placeholder{color:var(--ink3)}
 
-/* ── INPUT ── */
-.income-card { background:var(--card); border-radius:var(--r); overflow:hidden; margin-bottom:10px; box-shadow:var(--sh-sm); }
-.inc-row { display:flex; align-items:center; padding:15px 16px; gap:12px; border-bottom:1px solid var(--line); }
-.inc-row:last-child { border-bottom:none; }
-.av { width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
-.av-t { background:var(--teal-lt); }
-.av-i { background:var(--indigo-lt); }
-.inc-who  { font-size:14px; font-weight:600; color:var(--ink); }
-.inc-desc { font-size:10px; color:var(--ink3); margin-top:1px; }
-.inc-right { display:flex; align-items:baseline; gap:3px; margin-left:auto; }
-.inc-num { font-family:'Inter',sans-serif; font-size:17px; font-weight:700; letter-spacing:-0.5px; background:none; border:none; outline:none; text-align:right; width:130px; color:var(--teal); }
-.inc-num.ind { color:var(--indigo); }
-.inc-unit { font-size:11px; color:var(--ink3); }
+/* STATS */
+.stat-tabs{display:flex;background:var(--card);border-radius:var(--r);padding:4px;margin-bottom:12px;gap:4px;box-shadow:var(--sh-sm)}
+.stat-tab{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:600;color:var(--ink3);border-radius:12px;cursor:pointer;transition:all .15s}
+.stat-tab.on{background:var(--indigo);color:#fff}
+.stat-panel{display:none}.stat-panel.on{display:block}
 
-.exp-card { background:var(--card); border-radius:var(--r); overflow:hidden; margin-bottom:10px; box-shadow:var(--sh-sm); }
-.exp-head { display:flex; align-items:center; justify-content:space-between; padding:12px 16px; background:var(--card2); border-bottom:1px solid var(--line); }
-.exp-head-l { display:flex; align-items:center; gap:7px; }
-.exp-title { font-size:13px; font-weight:700; color:var(--ink); }
-.exp-badge { font-size:10px; font-weight:600; padding:2px 7px; border-radius:6px; }
-.eb-c { background:var(--coral-lt); color:var(--coral); }
-.eb-a { background:var(--amber-lt); color:var(--amber); }
-.exp-sum { font-family:'Inter',sans-serif; font-size:14px; font-weight:700; color:var(--coral); }
-.exp-list { padding:3px 0 4px; }
-.exp-item { display:flex; align-items:center; padding:10px 16px; gap:9px; border-bottom:1px solid var(--line); }
-.exp-item:last-child { border-bottom:none; }
-.exp-dot { width:5px; height:5px; border-radius:50%; border:1.5px solid var(--ink3); flex-shrink:0; }
-.exp-name { flex:1; font-size:13px; color:var(--ink2); background:none; border:none; outline:none; font-family:inherit; min-width:0; }
-.exp-name::placeholder { color:var(--ink3); }
-.exp-amt { font-family:'Inter',sans-serif; font-size:13px; font-weight:600; color:var(--ink); background:none; border:none; outline:none; font-family:inherit; text-align:right; width:72px; }
-.exp-amt::placeholder { color:var(--ink3); }
-.exp-unit { font-size:10px; color:var(--ink3); }
-.exp-del { width:20px; height:20px; border-radius:5px; background:var(--coral-lt); border:none; color:var(--coral); font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.add-btn { margin:5px 12px 10px; display:flex; align-items:center; justify-content:center; gap:5px; background:none; border:1.5px dashed var(--line); border-radius:11px; padding:9px; color:var(--ink3); font-size:12px; font-weight:500; cursor:pointer; width:calc(100% - 24px); font-family:inherit; }
-.add-btn:active { border-color:var(--indigo); color:var(--indigo); }
+.mstat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.mstat-card{background:var(--card);border-radius:var(--rs);padding:14px;box-shadow:var(--sh-sm)}
+.msc-lbl{font-size:10px;color:var(--ink3);font-weight:600;letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.msc-val{font-family:'Inter',sans-serif;font-size:18px;font-weight:700;letter-spacing:-.6px}
 
-.note-input-card { background:var(--card); border-radius:var(--r); padding:16px; margin-bottom:10px; box-shadow:var(--sh-sm); }
-.note-input-label { font-size:11px; font-weight:700; color:var(--ink3); letter-spacing:0.8px; text-transform:uppercase; margin-bottom:10px; }
-.note-textarea { width:100%; background:var(--bg); border:1.5px solid var(--line); border-radius:12px; padding:12px 14px; font-size:14px; color:var(--ink); font-family:inherit; line-height:1.6; outline:none; resize:none; min-height:90px; transition:border-color 0.15s; }
-.note-textarea:focus { border-color:var(--indigo); }
-.note-textarea::placeholder { color:var(--ink3); }
+.mbar-card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:10px;box-shadow:var(--sh-sm)}
+.mbar-title{font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:14px}
+.hbar-wrap{display:flex;flex-direction:column;gap:10px}
+.hbar-row{display:flex;align-items:center;gap:10px}
+.hbar-lbl{font-size:11px;color:var(--ink3);width:44px;flex-shrink:0}
+.hbar-track{flex:1;height:8px;background:var(--bg2);border-radius:99px;overflow:hidden}
+.hbar-fill{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.hbar-val{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:var(--ink2);min-width:52px;text-align:right}
 
-/* ── STATS ── */
-.stat-tabs { display:flex; background:var(--card); border-radius:var(--r); padding:4px; margin-bottom:12px; gap:4px; box-shadow:var(--sh-sm); }
-.stat-tab { flex:1; padding:9px; text-align:center; font-size:13px; font-weight:600; color:var(--ink3); border-radius:12px; cursor:pointer; transition:all 0.15s; }
-.stat-tab.on { background:var(--indigo); color:#fff; }
+.yr-nav{display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;box-shadow:var(--sh-sm)}
+.yr-num{font-family:'Inter',sans-serif;font-size:26px;font-weight:900;letter-spacing:-1.5px;color:var(--ink)}
+.yr-sub{font-size:11px;color:var(--ink3);margin-top:1px}
+.yr-btns{display:flex;gap:6px}
+.yr-btn{width:34px;height:34px;border-radius:10px;background:var(--bg2);border:1px solid var(--line);color:var(--ink2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.yr-btn:active{background:var(--line)}
 
-.stat-panel { display:none; }
-.stat-panel.on { display:block; }
+.cumul-card{background:linear-gradient(135deg,#4F46E5,#7C3AED);border-radius:var(--r);padding:20px 22px;margin-bottom:10px;position:relative;overflow:hidden}
+.cumul-card::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(255,255,255,.12) 0%,transparent 65%);pointer-events:none}
+.cumul-ey{font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:4px;font-weight:600}
+.cumul-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px}
+.cumul-num{font-family:'Inter',sans-serif;font-size:30px;font-weight:900;letter-spacing:-1.5px;color:#fff}
+.cumul-unit{font-size:13px;font-weight:400;color:rgba(255,255,255,.45)}
+.cumul-pct{font-family:'Inter',sans-serif;font-size:36px;font-weight:900;letter-spacing:-2px;color:#2DD4BF}
+.cumul-pct-sign{font-size:18px;color:#2DD4BF}
+.cumul-track{background:rgba(255,255,255,.15);border-radius:99px;height:5px;overflow:hidden;margin-bottom:10px}
+.cumul-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#2DD4BF,#A78BFA);transition:width .9s}
+.cumul-meta{display:flex;justify-content:space-between}
+.cumul-meta-item{font-size:11px;color:rgba(255,255,255,.4)}
+.cumul-meta-val{font-family:'Inter',sans-serif;font-weight:600;color:rgba(255,255,255,.75)}
+.delta-badge{display:inline-flex;align-items:center;gap:4px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;margin-top:6px}
+.delta-up{background:rgba(45,212,191,.2);color:#2DD4BF}
+.delta-down{background:rgba(244,63,94,.2);color:#FB7185}
+.delta-zero{background:rgba(255,255,255,.1);color:rgba(255,255,255,.5)}
 
-.mstat-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
-.mstat-card { background:var(--card); border-radius:var(--rs); padding:14px; box-shadow:var(--sh-sm); }
-.msc-lbl { font-size:10px; color:var(--ink3); font-weight:600; letter-spacing:0.5px; margin-bottom:6px; display:flex; align-items:center; gap:5px; }
-.msc-val { font-family:'Inter',sans-serif; font-size:18px; font-weight:700; letter-spacing:-0.6px; }
+.yr-sum{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--card);border-radius:var(--r);margin-bottom:10px;overflow:hidden;box-shadow:var(--sh-sm)}
+.ys{padding:13px 0;text-align:center;border-right:1px solid var(--line)}
+.ys:last-child{border-right:none}
+.ys-num{font-family:'Inter',sans-serif;font-size:15px;font-weight:700;letter-spacing:-.4px}
+.ys-lbl{font-size:10px;color:var(--ink3);margin-top:2px}
 
-.mbar-card { background:var(--card); border-radius:var(--r); padding:16px; margin-bottom:10px; box-shadow:var(--sh-sm); }
-.mbar-title { font-size:12px; font-weight:600; color:var(--ink2); margin-bottom:14px; }
-.hbar-wrap { display:flex; flex-direction:column; gap:10px; }
-.hbar-row { display:flex; align-items:center; gap:10px; }
-.hbar-lbl { font-size:11px; color:var(--ink3); width:44px; flex-shrink:0; }
-.hbar-track { flex:1; height:8px; background:var(--bg2); border-radius:99px; overflow:hidden; }
-.hbar-fill { height:100%; border-radius:99px; transition:width 0.6s cubic-bezier(0.4,0,0.2,1); }
-.hbar-val { font-family:'Inter',sans-serif; font-size:11px; font-weight:600; color:var(--ink2); min-width:40px; text-align:right; }
+.yr-chart-card{background:var(--card);border-radius:var(--r);padding:16px;margin-bottom:10px;box-shadow:var(--sh-sm)}
+.yr-chart-title{font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:16px}
+.dot-chart{position:relative;height:140px;display:flex;align-items:flex-end;padding:0 4px 24px;border-bottom:1px solid var(--line)}
+.dot-guide{position:absolute;left:4px;right:4px;height:1px;background:var(--line);opacity:.7}
+.dc-group{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;position:relative}
+.dc-bars{display:flex;gap:2px;align-items:flex-end;justify-content:center;height:100%}
+.dc-bar{width:9px;border-radius:3px 3px 0 0;min-height:2px;transition:height .6s cubic-bezier(.4,0,.2,1)}
+.dc-lbl{position:absolute;bottom:-18px;font-size:9px;color:var(--ink3);left:50%;transform:translateX(-50%);white-space:nowrap}
+.dc-lbl.now{color:var(--indigo);font-weight:700}
+.dc-group.now::before{content:'';position:absolute;top:0;left:10%;right:10%;bottom:24px;background:rgba(79,70,229,.05);border-radius:6px}
+.dc-group:not(.now) .dc-bar{opacity:.4}
+.yr-legend{display:flex;gap:14px;margin-top:14px;flex-wrap:wrap}
+.yl{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--ink3)}
+.yldot{width:7px;height:7px;border-radius:2px}
 
-.yr-nav { display:flex; align-items:center; justify-content:space-between; background:var(--card); border-radius:var(--r); padding:14px 16px; margin-bottom:10px; box-shadow:var(--sh-sm); }
-.yr-num { font-family:'Inter',sans-serif; font-size:26px; font-weight:900; letter-spacing:-1.5px; color:var(--ink); }
-.yr-sub { font-size:11px; color:var(--ink3); margin-top:1px; }
-.yr-btns { display:flex; gap:6px; }
-.yr-btn { width:34px; height:34px; border-radius:10px; background:var(--bg2); border:1px solid var(--line); color:var(--ink2); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.yr-btn:active { background:var(--line); }
+.yr-list{background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh-sm)}
+.yr-row{display:flex;align-items:center;padding:12px 14px;gap:12px;border-bottom:1px solid var(--line)}
+.yr-row:last-child{border-bottom:none}
+.yr-row.now{background:var(--indigo-lt)}
+.yr-mo{font-family:'Inter',sans-serif;font-size:12px;font-weight:700;color:var(--ink3);min-width:26px}
+.yr-row.now .yr-mo{color:var(--indigo)}
+.yr-bars{flex:1;display:flex;flex-direction:column;gap:3px}
+.yr-br{display:flex;align-items:center;gap:5px}
+.yr-b{height:3px;border-radius:99px;min-width:2px;transition:width .4s}
+.yr-bl{font-family:'Inter',sans-serif;font-size:9px;color:var(--ink3);min-width:42px;text-align:right}
+.yr-sv{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;letter-spacing:-.4px;min-width:60px;text-align:right}
 
-.cumul-card { background:linear-gradient(135deg,#4F46E5,#7C3AED); border-radius:var(--r); padding:20px 22px; margin-bottom:10px; position:relative; overflow:hidden; }
-.cumul-card::before { content:''; position:absolute; top:-40px; right:-40px; width:160px; height:160px; background:radial-gradient(circle,rgba(255,255,255,0.12) 0%,transparent 65%); pointer-events:none; }
-.cumul-eyebrow { font-size:10px; letter-spacing:1.4px; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:4px; font-weight:600; }
-.cumul-row { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:12px; }
-.cumul-num { font-family:'Inter',sans-serif; font-size:30px; font-weight:900; letter-spacing:-1.5px; color:#fff; }
-.cumul-unit { font-size:13px; font-weight:400; color:rgba(255,255,255,0.45); }
-.cumul-pct { font-family:'Inter',sans-serif; font-size:36px; font-weight:900; letter-spacing:-2px; color:#2DD4BF; }
-.cumul-pct-sign { font-size:18px; color:#2DD4BF; }
-.cumul-track { background:rgba(255,255,255,0.15); border-radius:99px; height:5px; overflow:hidden; margin-bottom:10px; }
-.cumul-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,#2DD4BF,#A78BFA); transition:width 0.9s; }
-.cumul-meta { display:flex; justify-content:space-between; }
-.cumul-meta-item { font-size:11px; color:rgba(255,255,255,0.4); }
-.cumul-meta-val { font-family:'Inter',sans-serif; font-weight:600; color:rgba(255,255,255,0.75); }
+/* SETUP */
+.setup-wrap{padding:24px 16px}
+.setup-hero{text-align:center;margin-bottom:28px}
+.setup-icon{font-size:48px;margin-bottom:12px}
+.setup-title{font-size:22px;font-weight:800;color:var(--ink);letter-spacing:-.5px;margin-bottom:6px}
+.setup-desc{font-size:14px;color:var(--ink2);line-height:1.6}
+.setup-card{background:var(--card);border-radius:var(--r);padding:20px;box-shadow:var(--sh);margin-bottom:12px}
+.setup-card-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.setup-card-desc{font-size:12px;color:var(--ink3);margin-bottom:16px;line-height:1.5}
+.field{margin-bottom:14px}
+.field-lbl{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+.field-input{width:100%;background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font-size:15px;color:var(--ink);font-family:inherit;outline:none;transition:border-color .15s}
+.field-input:focus{border-color:var(--indigo)}
+.field-input::placeholder{color:var(--ink3)}
+.btn-primary{width:100%;background:var(--indigo);color:#fff;border:none;border-radius:13px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px;transition:opacity .15s}
+.btn-primary:active{opacity:.85}
+.btn-secondary{width:100%;background:var(--bg2);color:var(--ink2);border:none;border-radius:13px;padding:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.setup-hint{font-size:12px;color:var(--ink3);margin-top:10px;line-height:1.5;text-align:center}
 
-.delta-badge { display:inline-flex; align-items:center; gap:4px; font-family:'Inter',sans-serif; font-size:12px; font-weight:700; padding:3px 10px; border-radius:99px; margin-top:6px; }
-.delta-up   { background:rgba(45,212,191,0.2); color:#2DD4BF; }
-.delta-down { background:rgba(244,63,94,0.2); color:#FB7185; }
-.delta-zero { background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.5); }
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(27,23,48,.5);z-index:100;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:flex-end;justify-content:center}
+.overlay.show{display:flex}
+.modal{background:var(--card);border-radius:22px 22px 0 0;padding:8px 20px 44px;width:100%;max-width:480px}
+.modal-handle{width:36px;height:4px;border-radius:2px;background:var(--line);margin:12px auto 20px}
+.modal-title{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:20px;letter-spacing:-.5px}
+.modal-lbl{font-size:10px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink3);margin-bottom:7px}
+.modal-input{width:100%;background:var(--bg);border:1.5px solid var(--line);border-radius:13px;padding:13px 15px;font-family:'Inter',sans-serif;font-size:22px;font-weight:700;color:var(--ink);outline:none;margin-bottom:16px;transition:border-color .15s}
+.modal-input:focus{border-color:var(--indigo)}
+.modal-input::placeholder{color:var(--ink3)}
+.modal-btn{width:100%;background:var(--indigo);color:#fff;border:none;border-radius:13px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit}
+.modal-btn:active{opacity:.85}
 
-.yr-sum { display:grid; grid-template-columns:1fr 1fr 1fr; background:var(--card); border-radius:var(--r); margin-bottom:10px; overflow:hidden; box-shadow:var(--sh-sm); }
-.ys { padding:13px 0; text-align:center; border-right:1px solid var(--line); }
-.ys:last-child { border-right:none; }
-.ys-num { font-family:'Inter',sans-serif; font-size:15px; font-weight:700; letter-spacing:-0.4px; }
-.ys-lbl { font-size:10px; color:var(--ink3); margin-top:2px; }
-
-.yr-chart-card { background:var(--card); border-radius:var(--r); padding:16px; margin-bottom:10px; box-shadow:var(--sh-sm); }
-.yr-chart-title { font-size:12px; font-weight:600; color:var(--ink2); margin-bottom:16px; }
-.dot-chart { position:relative; height:140px; display:flex; align-items:flex-end; padding:0 4px 24px; border-bottom:1px solid var(--line); }
-.dot-guide { position:absolute; left:4px; right:4px; height:1px; background:var(--line); opacity:0.7; }
-.dc-group { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; position:relative; }
-.dc-bars { display:flex; gap:2px; align-items:flex-end; justify-content:center; height:100%; }
-.dc-bar { width:9px; border-radius:3px 3px 0 0; min-height:2px; transition:height 0.6s cubic-bezier(0.4,0,0.2,1); }
-.dc-lbl { position:absolute; bottom:-18px; font-size:9px; color:var(--ink3); left:50%; transform:translateX(-50%); white-space:nowrap; }
-.dc-lbl.now { color:var(--indigo); font-weight:700; }
-.dc-group.now::before { content:''; position:absolute; top:0; left:10%; right:10%; bottom:24px; background:rgba(79,70,229,0.05); border-radius:6px; }
-.dc-group:not(.now) .dc-bar { opacity:0.4; }
-.yr-legend { display:flex; gap:14px; margin-top:14px; flex-wrap:wrap; }
-.yl { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--ink3); }
-.yldot { width:7px; height:7px; border-radius:2px; }
-
-.yr-list { background:var(--card); border-radius:var(--r); overflow:hidden; box-shadow:var(--sh-sm); }
-.yr-row { display:flex; align-items:center; padding:12px 14px; gap:12px; border-bottom:1px solid var(--line); }
-.yr-row:last-child { border-bottom:none; }
-.yr-row.now { background:var(--indigo-lt); }
-.yr-mo { font-family:'Inter',sans-serif; font-size:12px; font-weight:700; color:var(--ink3); min-width:26px; }
-.yr-row.now .yr-mo { color:var(--indigo); }
-.yr-bars { flex:1; display:flex; flex-direction:column; gap:3px; }
-.yr-br { display:flex; align-items:center; gap:5px; }
-.yr-b { height:3px; border-radius:99px; min-width:2px; transition:width 0.4s; }
-.yr-bl { font-family:'Inter',sans-serif; font-size:9px; color:var(--ink3); min-width:34px; text-align:right; }
-.yr-sv { font-family:'Inter',sans-serif; font-size:13px; font-weight:700; letter-spacing:-0.4px; min-width:56px; text-align:right; }
-
-/* ── SETUP SCREEN ── */
-.setup-wrap { padding:24px 16px; }
-.setup-hero { text-align:center; margin-bottom:28px; }
-.setup-icon { font-size:48px; margin-bottom:12px; }
-.setup-title { font-size:22px; font-weight:800; color:var(--ink); letter-spacing:-0.5px; margin-bottom:6px; }
-.setup-desc  { font-size:14px; color:var(--ink2); line-height:1.6; }
-
-.setup-card { background:var(--card); border-radius:var(--r); padding:20px; box-shadow:var(--sh); margin-bottom:12px; }
-.setup-card-title { font-size:14px; font-weight:700; color:var(--ink); margin-bottom:4px; }
-.setup-card-desc  { font-size:12px; color:var(--ink3); margin-bottom:16px; line-height:1.5; }
-
-.field { margin-bottom:14px; }
-.field-lbl { font-size:10px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--ink3); margin-bottom:6px; }
-.field-input {
-  width:100%; background:var(--bg); border:1.5px solid var(--line);
-  border-radius:12px; padding:12px 14px; font-size:15px; color:var(--ink);
-  font-family:inherit; outline:none; transition:border-color 0.15s;
-}
-.field-input:focus { border-color:var(--indigo); }
-.field-input::placeholder { color:var(--ink3); }
-
-.btn-primary { width:100%; background:var(--indigo); color:#fff; border:none; border-radius:13px; padding:15px; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; margin-bottom:8px; transition:opacity 0.15s; }
-.btn-primary:active { opacity:0.85; }
-.btn-secondary { width:100%; background:var(--bg2); color:var(--ink2); border:none; border-radius:13px; padding:14px; font-size:14px; font-weight:600; cursor:pointer; font-family:inherit; }
-
-.setup-hint { font-size:12px; color:var(--ink3); margin-top:10px; line-height:1.5; text-align:center; }
-.setup-hint a { color:var(--indigo); text-decoration:none; }
-.setup-hint strong { color:var(--coral); }
-
-/* ── MODAL ── */
-.overlay { display:none; position:fixed; inset:0; background:rgba(27,23,48,0.5); z-index:100; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); align-items:flex-end; justify-content:center; }
-.overlay.show { display:flex; }
-.modal { background:var(--card); border-radius:22px 22px 0 0; padding:8px 20px 44px; width:100%; max-width:480px; }
-.modal-handle { width:36px; height:4px; border-radius:2px; background:var(--line); margin:12px auto 20px; }
-.modal-title  { font-size:20px; font-weight:700; color:var(--ink); margin-bottom:20px; letter-spacing:-0.5px; }
-.modal-lbl    { font-size:10px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--ink3); margin-bottom:7px; }
-.modal-input  { width:100%; background:var(--bg); border:1.5px solid var(--line); border-radius:13px; padding:13px 15px; font-family:'Inter',sans-serif; font-size:22px; font-weight:700; color:var(--ink); outline:none; margin-bottom:16px; transition:border-color 0.15s; }
-.modal-input:focus { border-color:var(--indigo); }
-.modal-input::placeholder { color:var(--ink3); }
-.modal-btn { width:100%; background:var(--indigo); color:#fff; border:none; border-radius:13px; padding:15px; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; }
-.modal-btn:active { opacity:0.85; }
-
-.empty { text-align:center; padding:22px; font-size:13px; color:var(--ink3); }
-input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
-
-/* toast */
-.toast { position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; padding:10px 20px; border-radius:99px; font-size:13px; font-weight:600; z-index:200; opacity:0; transition:opacity 0.3s; white-space:nowrap; pointer-events:none; }
-.toast.show { opacity:1; }
+.empty{text-align:center;padding:22px;font-size:13px;color:var(--ink3)}
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:200;opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none}
+.toast.show{opacity:1}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header" id="mainHeader" style="display:none">
   <div>
     <div class="brand-name">영준 &amp; 원지 💑</div>
     <div class="brand-sub">Family Budget</div>
-    <div class="sync-indicator">
-      <div class="sync-dot off" id="syncDot"></div>
-      <span id="syncText">연결 중...</span>
+    <div class="sync-row">
+      <div class="sdot off" id="sdot"></div>
+      <span class="stext" id="stext">연결 중...</span>
     </div>
   </div>
   <div class="mpill">
-    <button class="mpill-btn" onclick="chM(-1)">‹</button>
+    <button class="mpill-btn" onclick="goMonth(-1)">‹</button>
     <div class="mpill-lbl" id="mLbl"></div>
-    <button class="mpill-btn" onclick="chM(1)">›</button>
+    <button class="mpill-btn" onclick="goMonth(1)">›</button>
   </div>
 </div>
 
-<!-- ══ SETUP SCREEN ══ -->
+<!-- SETUP -->
 <div id="setupScreen">
   <div class="setup-wrap">
     <div class="setup-hero">
@@ -364,55 +270,39 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
       <div class="setup-title">영준 &amp; 원지 가계부</div>
       <div class="setup-desc">Supabase를 연결하면 아이폰, 아이패드, 노트북<br>모든 기기에서 데이터가 자동 동기화돼요.</div>
     </div>
-
     <div class="setup-card">
       <div class="setup-card-title">🔗 Supabase 연결</div>
       <div class="setup-card-desc">
         1. <a href="https://supabase.com" target="_blank" style="color:var(--indigo)">supabase.com</a> 에서 무료 프로젝트 생성<br>
-        2. Settings → API → Project URL &amp; anon key 복사<br>
-        3. SQL Editor에서 아래 테이블 생성 후 입력
+        2. Settings → API → Project URL &amp; Legacy anon key 복사<br>
+        3. SQL Editor에서 테이블 생성 후 아래 입력
       </div>
-
-      <div class="field">
-        <div class="field-lbl">Project URL</div>
-        <input class="field-input" id="cfgUrl" placeholder="https://xxxx.supabase.co" type="url">
-      </div>
-      <div class="field">
-        <div class="field-lbl">Anon Key</div>
-        <input class="field-input" id="cfgKey" placeholder="eyJ..." type="password">
-      </div>
-      <div class="field">
-        <div class="field-lbl">사용자 ID (기기 구분용, 예: youngjun)</div>
-        <input class="field-input" id="cfgUser" placeholder="youngjun" maxlength="30">
-      </div>
-
+      <div class="field"><div class="field-lbl">Project URL</div><input class="field-input" id="cfgUrl" placeholder="https://xxxx.supabase.co" type="url"></div>
+      <div class="field"><div class="field-lbl">Legacy Anon Key</div><input class="field-input" id="cfgKey" placeholder="eyJ..." type="password"></div>
+      <div class="field"><div class="field-lbl">사용자 ID (예: youngjun)</div><input class="field-input" id="cfgUser" placeholder="youngjun" maxlength="30"></div>
       <button class="btn-primary" onclick="saveConfig()">연결하기</button>
-      <button class="btn-secondary" onclick="showSqlGuide()">SQL 테이블 생성 코드 보기</button>
+      <button class="btn-secondary" onclick="toggleSql()">SQL 테이블 생성 코드 보기</button>
       <div class="setup-hint" id="setupHint"></div>
     </div>
-
-    <div class="setup-card" id="sqlGuideCard" style="display:none">
+    <div class="setup-card" id="sqlCard" style="display:none">
       <div class="setup-card-title">📋 SQL 테이블 생성</div>
       <div class="setup-card-desc">Supabase → SQL Editor에 붙여넣고 실행하세요.</div>
-      <textarea class="field-input" readonly style="min-height:160px;font-size:11px;font-family:monospace;line-height:1.5" id="sqlCode"></textarea>
+      <textarea class="field-input" readonly style="min-height:180px;font-size:11px;font-family:monospace;line-height:1.5" id="sqlCode"></textarea>
       <button class="btn-secondary" onclick="copySql()" style="margin-top:8px">복사하기</button>
     </div>
   </div>
 </div>
 
-<!-- ══ MAIN APP ══ -->
+<!-- MAIN APP -->
 <div id="mainApp" style="display:none">
 
   <!-- HOME -->
   <div class="page active content" id="page-home">
     <div class="hero">
       <button class="hero-goal-btn" onclick="openGoal()">목표 설정</button>
-      <div class="hero-eyebrow">누적 저축</div>
-      <div class="hero-num" id="hAmt">0<span class="unit">만원</span></div>
-      <div class="hero-meta">
-        <span class="hero-sub">목표 달성률</span>
-        <span class="hero-pct" id="hPct">0%</span>
-      </div>
+      <div class="hero-ey">누적 저축</div>
+      <div class="hero-num" id="hAmt">0<span class="u">만원</span></div>
+      <div class="hero-meta"><span class="hero-sub">목표 달성률</span><span class="hero-pct" id="hPct">0%</span></div>
       <div class="track-bg"><div class="track-fill" id="hTrack" style="width:0%"></div></div>
       <div class="hero-stats">
         <div class="hst"><div class="hst-val" id="hGoal">—</div><div class="hst-lbl">목표 금액</div></div>
@@ -432,20 +322,36 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
   <div class="page content" id="page-input">
     <div class="slbl" style="margin-top:0">이달 수입</div>
     <div class="income-card">
-      <div class="inc-row"><div class="av av-t">💼</div><div><div class="inc-who">영준 월급</div><div class="inc-desc">이달 수령액</div></div><div class="inc-right"><input type="text" inputmode="numeric" class="inc-num" id="myIncome" placeholder="예) 3,200,000" oninput="onCommaInput(this);schedSave()"><span class="inc-unit">원</span></div></div>
-      <div class="inc-row"><div class="av av-i">💕</div><div><div class="inc-who">원지 월급</div><div class="inc-desc">이달 수령액</div></div><div class="inc-right"><input type="text" inputmode="numeric" class="inc-num ind" id="wifeIncome" placeholder="예) 3,200,000" oninput="onCommaInput(this);schedSave()"><span class="inc-unit">원</span></div></div>
+      <div class="inc-row">
+        <div class="av av-t">💼</div>
+        <div><div class="inc-who">영준 월급</div><div class="inc-desc">이달 수령액</div></div>
+        <div class="inc-right"><input type="text" inputmode="numeric" class="inc-num" id="myIncome" placeholder="" oninput="commaInput(this);schedSave()"><span class="inc-unit">원</span></div>
+      </div>
+      <div class="inc-row">
+        <div class="av av-i">💕</div>
+        <div><div class="inc-who">원지 월급</div><div class="inc-desc">이달 수령액</div></div>
+        <div class="inc-right"><input type="text" inputmode="numeric" class="inc-num ind" id="wifeIncome" placeholder="" oninput="commaInput(this);schedSave()"><span class="inc-unit">원</span></div>
+      </div>
     </div>
+
     <div class="slbl">지출 내역</div>
     <div class="exp-card">
-      <div class="exp-head"><div class="exp-head-l"><span class="exp-title">고정 지출</span><span class="exp-badge eb-c">Fixed</span></div><span class="exp-sum" id="fixedSum">0 만</span></div>
+      <div class="exp-head">
+        <div class="exp-head-l"><span class="exp-title">고정 지출</span><span class="exp-badge eb-c">Fixed</span><span class="carry-badge" id="carryBadge" style="display:none">이전 달 복사됨</span></div>
+        <span class="exp-sum" id="fixedSum">0만원</span>
+      </div>
       <div class="exp-list" id="fixedItems"></div>
       <button class="add-btn" onclick="addItem('fixed')">＋ 항목 추가</button>
     </div>
     <div class="exp-card">
-      <div class="exp-head"><div class="exp-head-l"><span class="exp-title">변동 지출</span><span class="exp-badge eb-a">Variable</span></div><span class="exp-sum" id="variableSum">0 만</span></div>
+      <div class="exp-head">
+        <div class="exp-head-l"><span class="exp-title">변동 지출</span><span class="exp-badge eb-a">Variable</span></div>
+        <span class="exp-sum" id="variableSum">0만원</span>
+      </div>
       <div class="exp-list" id="variableItems"></div>
       <button class="add-btn" onclick="addItem('variable')">＋ 항목 추가</button>
     </div>
+
     <div class="slbl">이달 특이사항</div>
     <div class="note-input-card">
       <div class="note-input-label">📝 메모</div>
@@ -461,10 +367,10 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
     </div>
     <div class="stat-panel on" id="spanel-month">
       <div class="mstat-grid">
-        <div class="mstat-card"><div class="msc-lbl"><span style="color:var(--teal)">●</span> 총 수입</div><div class="msc-val" style="color:var(--teal)" id="msIncome">0 만</div></div>
-        <div class="mstat-card"><div class="msc-lbl"><span style="color:var(--amber)">●</span> 총 저축</div><div class="msc-val" style="color:var(--amber)" id="msSave">0 만</div></div>
-        <div class="mstat-card"><div class="msc-lbl"><span style="color:var(--coral)">●</span> 고정 지출</div><div class="msc-val" style="color:var(--coral)" id="msFixed">0 만</div></div>
-        <div class="mstat-card"><div class="msc-lbl"><span style="color:var(--coral2)">●</span> 변동 지출</div><div class="msc-val" style="color:var(--coral2)" id="msVariable">0 만</div></div>
+        <div class="mstat-card"><div class="msc-lbl"><span style="color:var(--teal)">●</span> 총 수입</div><div class="msc-val" style="color:var(--teal)" id="msIncome">0만원</div></div>
+        <div class="mstat-card"><div class="msc-lbl"><span style="color:var(--amber)">●</span> 총 저축</div><div class="msc-val" style="color:var(--amber)" id="msSave">0만원</div></div>
+        <div class="mstat-card"><div class="msc-lbl"><span style="color:var(--coral)">●</span> 고정 지출</div><div class="msc-val" style="color:var(--coral)" id="msFixed">0만원</div></div>
+        <div class="mstat-card"><div class="msc-lbl"><span style="color:var(--coral2)">●</span> 변동 지출</div><div class="msc-val" style="color:var(--coral2)" id="msVariable">0만원</div></div>
       </div>
       <div class="mbar-card">
         <div class="mbar-title">이달 수입 / 지출 구성</div>
@@ -474,7 +380,7 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
     <div class="stat-panel" id="spanel-year">
       <div class="yr-nav"><div><div class="yr-num" id="yrLabel">2026</div><div class="yr-sub">연간 통계</div></div><div class="yr-btns"><button class="yr-btn" onclick="chY(-1)">‹</button><button class="yr-btn" onclick="chY(1)">›</button></div></div>
       <div class="cumul-card">
-        <div class="cumul-eyebrow">전체 누적 저축</div>
+        <div class="cumul-ey">전체 누적 저축</div>
         <div class="cumul-row"><div><div class="cumul-num" id="cAmt">0<span class="cumul-unit"> 만원</span></div></div><div style="text-align:right"><span class="cumul-pct" id="cPct">0</span><span class="cumul-pct-sign">%</span></div></div>
         <div id="cDelta"></div>
         <div class="cumul-track" style="margin-top:12px"><div class="cumul-fill" id="cBar" style="width:0%"></div></div>
@@ -505,199 +411,134 @@ input[type=number]::-webkit-inner-spin-button { -webkit-appearance:none; }
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-title">목표 저축 금액</div>
-    <div class="modal-lbl">목표 금액 (원 단위로 입력)</div>
-    <input type="text" inputmode="numeric" class="modal-input" id="goalInput" placeholder="예) 50,000,000" oninput="onCommaInput(this)">
+    <div class="modal-lbl">금액 (원 단위 입력)</div>
+    <input type="text" inputmode="numeric" class="modal-input" id="goalInput" placeholder="50,000,000" oninput="commaInput(this)">
     <button class="modal-btn" onclick="saveGoal()">저장하기</button>
   </div>
 </div>
 
-<!-- BOTTOM NAV -->
 <div class="nav" id="mainNav" style="display:none">
   <div class="ni on" id="ni-home" onclick="switchTab('home',this)"><div class="ni-icon">🏠</div><div class="ni-lbl">홈</div></div>
   <div class="ni" id="ni-input" onclick="switchTab('input',this)"><div class="ni-icon">✏️</div><div class="ni-lbl">입력</div></div>
   <div class="ni" id="ni-stats" onclick="switchTab('stats',this)"><div class="ni-icon">📊</div><div class="ni-lbl">통계</div></div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
+/* ── CONFIG ── */
+const CFG_KEY='gb_v5_cfg';
+const getCfg=()=>{try{return JSON.parse(localStorage.getItem(CFG_KEY))||null;}catch{return null;}};
+const setCfg=c=>localStorage.setItem(CFG_KEY,JSON.stringify(c));
 
-/* ── 콤마 포맷 헬퍼 ── */
-function toNum(str){ return parseInt((str||'').toString().replace(/,/g,''))||0; }
-function addComma(str){
-  const n = str.toString().replace(/[^0-9]/g,'');
-  return n ? parseInt(n).toLocaleString('ko-KR') : '';
-}
-function onCommaInput(el){
-  const pos = el.selectionStart;
-  const prev = el.value.length;
-  el.value = addComma(el.value);
-  const diff = el.value.length - prev;
-  el.setSelectionRange(pos+diff, pos+diff);
-}
+let SB_URL='',SB_KEY='';
 
-/* ═══════════════════════════════════════
-   CONFIG
-═══════════════════════════════════════ */
-const CFG_KEY = 'gb_supabase_cfg';
+/* ── SUPABASE API ── */
+function sbH(extra={}){return{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Accept':'application/json',...extra};}
 
-function getCfg(){ try{ return JSON.parse(localStorage.getItem(CFG_KEY))||null; }catch{ return null; } }
-function setCfg(c){ localStorage.setItem(CFG_KEY, JSON.stringify(c)); }
-
-/* ═══════════════════════════════════════
-   SUPABASE CLIENT — PostgREST v12 호환
-═══════════════════════════════════════ */
-let SB_URL='', SB_KEY='', SB_USER='';
-
-function sbBase(extra={}){
-  return {
-    'apikey':        SB_KEY,
-    'Authorization': 'Bearer ' + SB_KEY,
-    'Content-Type':  'application/json',
-    'Accept':        'application/json',
-    ...extra
-  };
-}
-
-async function sbGet(table, qs=''){
-  const url = `${SB_URL}/rest/v1/${table}${qs?'?'+qs:''}`;
-  const r = await fetch(url, { method:'GET', headers: sbBase() });
-  if(!r.ok){
-    let msg='';
-    try{ const j=await r.json(); msg=j.message||j.hint||j.error||JSON.stringify(j); }
-    catch{ msg=await r.text().catch(()=>`HTTP ${r.status}`); }
-    throw new Error(`[${r.status}] ${msg}`);
-  }
+async function sbGet(table,qs=''){
+  const r=await fetch(`${SB_URL}/rest/v1/${table}${qs?'?'+qs:''}`,{method:'GET',headers:sbH()});
+  if(!r.ok){let m='';try{const j=await r.json();m=j.message||j.hint||JSON.stringify(j);}catch{m=await r.text().catch(()=>`HTTP ${r.status}`);}throw new Error(`[${r.status}] ${m}`);}
   return r.json();
 }
 
-async function sbUpsert(table, data){
-  const r = await fetch(`${SB_URL}/rest/v1/${table}`, {
-    method:  'POST',
-    headers: sbBase({ 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
-    body:    JSON.stringify(data)
-  });
-  if(!r.ok){ const t=await r.text(); throw new Error(`[${r.status}] ${t}`); }
+async function sbPatch(table,qs,body){
+  const r=await fetch(`${SB_URL}/rest/v1/${table}?${qs}`,{method:'PATCH',headers:sbH({'Prefer':'return=minimal'}),body:JSON.stringify(body)});
+  if(!r.ok){let m='';try{const j=await r.json();m=j.message||JSON.stringify(j);}catch{m=`HTTP ${r.status}`;}throw new Error(m);}
 }
 
-async function sbDelete(table, qs){
-  const r = await fetch(`${SB_URL}/rest/v1/${table}?${qs}`, {
-    method:  'DELETE',
-    headers: sbBase({ 'Prefer': 'return=minimal' })
-  });
-  if(!r.ok){ const t=await r.text(); throw new Error(`[${r.status}] ${t}`); }
+async function sbInsert(table,body){
+  const r=await fetch(`${SB_URL}/rest/v1/${table}`,{method:'POST',headers:sbH({'Prefer':'return=minimal'}),body:JSON.stringify(body)});
+  if(!r.ok){let m='';try{const j=await r.json();m=j.message||JSON.stringify(j);}catch{m=`HTTP ${r.status}`;}throw new Error(m);}
 }
 
-// connection test — actual GET to budget_goal table
 async function sbPing(){
-  const r = await fetch(`${SB_URL}/rest/v1/budget_goal?select=id&limit=1`, {
-    method:  'GET',
-    headers: {
-      'apikey':        SB_KEY,
-      'Authorization': 'Bearer ' + SB_KEY,
-      'Accept':        'application/json'
-    }
-  });
-  if(!r.ok){
-    let msg = '';
-    try { const j = await r.json(); msg = j.message || j.hint || JSON.stringify(j); }
-    catch { msg = await r.text().catch(()=>''); }
-    throw new Error(`[${r.status}] ${msg}`);
-  }
+  const r=await fetch(`${SB_URL}/rest/v1/budget_goal?select=id&limit=1`,{method:'GET',headers:sbH()});
+  if(!r.ok){let m='';try{const j=await r.json();m=j.message||JSON.stringify(j);}catch{m=`HTTP ${r.status}`;}throw new Error(m);}
 }
 
-/* ═══════════════════════════════════════
-   IN-MEMORY CACHE  (replaces localStorage)
-═══════════════════════════════════════ */
-let cache = {}; // { 'YYYY-MM': {myIncome,wifeIncome,fixed,variable,note}, 'goal': {amount} }
+/* ── CACHE & UTILS ── */
+let cache={};
+let cY,cM,sY,saveTimer=null;
 
-function getCache(key){ return cache[key] || null; }
-function setCache(key, val){ cache[key] = val; }
+const toNum=s=>parseInt((s||'').toString().replace(/,/g,'').replace(/[^0-9]/g,''))||0;
+const addComma=s=>{const n=s.toString().replace(/[^0-9]/g,'');return n?parseInt(n).toLocaleString('ko-KR'):'';}
 
-/* ═══════════════════════════════════════
-   SETUP SCREEN
-═══════════════════════════════════════ */
-const SQL = `-- 월별 가계부 데이터
-create table if not exists budget_months (
-  id         bigint generated always as identity primary key,
-  month_key  text not null,       -- 'YYYY-MM'
-  my_income  numeric default 0,
+function commaInput(el){
+  const v=el.value.replace(/[^0-9]/g,'');
+  el.value=v?parseInt(v).toLocaleString('ko-KR'):'';
+}
+
+// 원→만원 변환 표시
+const fmtMan=n=>{
+  const v=Number(n)||0;
+  if(v===0)return'0';
+  const m=v/10000;
+  return Number.isInteger(m)?m.toLocaleString('ko-KR'):parseFloat(m.toFixed(1)).toLocaleString('ko-KR');
+};
+// 만원 단위 숫자를 만원 표시
+const fmtManRaw=n=>{
+  const v=Number(n)||0;
+  if(v===0)return'0';
+  return Number.isInteger(v)?v.toLocaleString('ko-KR'):parseFloat(v.toFixed(1)).toLocaleString('ko-KR');
+};
+
+function md(key){
+  if(!cache[key])cache[key]={myIncome:0,wifeIncome:0,fixed:[],variable:[],note:'',_isNew:true};
+  return cache[key];
+}
+
+/* ── SQL ── */
+const SQL=`create table if not exists budget_months (
+  id bigint generated always as identity primary key,
+  month_key text not null unique,
+  my_income numeric default 0,
   wife_income numeric default 0,
   fixed_items jsonb default '[]',
   variable_items jsonb default '[]',
-  note       text default '',
-  updated_at timestamptz default now(),
-  unique(month_key)
-);
-
--- 목표 금액
-create table if not exists budget_goal (
-  id      bigint generated always as identity primary key,
-  amount  numeric default 0,
+  note text default '',
   updated_at timestamptz default now()
 );
-
--- Row Level Security 비활성화 (가족 공유용)
+create table if not exists budget_goal (
+  id bigint generated always as identity primary key,
+  amount numeric default 0,
+  updated_at timestamptz default now()
+);
 alter table budget_months disable row level security;
 alter table budget_goal disable row level security;`;
 
-function showSqlGuide(){
-  document.getElementById('sqlCode').value = SQL;
-  document.getElementById('sqlGuideCard').style.display = 'block';
+function toggleSql(){
+  const c=document.getElementById('sqlCard');
+  document.getElementById('sqlCode').value=SQL;
+  c.style.display=c.style.display==='none'?'block':'none';
 }
 function copySql(){
-  navigator.clipboard.writeText(SQL).then(()=>toast('SQL 복사됨!')).catch(()=>{
-    document.getElementById('sqlCode').select();
-    document.execCommand('copy');
-    toast('SQL 복사됨!');
-  });
+  navigator.clipboard.writeText(SQL).then(()=>showToast('SQL 복사됨!')).catch(()=>{document.getElementById('sqlCode').select();document.execCommand('copy');showToast('SQL 복사됨!');});
 }
 
+/* ── SETUP ── */
 async function saveConfig(){
-  const url  = document.getElementById('cfgUrl').value.trim().replace(/\/+$/,'').replace(/\s/g,'');
-  const key  = document.getElementById('cfgKey').value.trim();
-  const user = document.getElementById('cfgUser').value.trim() || 'user';
-  const hint = document.getElementById('setupHint');
-
-  if(!url||!key){ hint.innerHTML='<strong>URL과 Key를 모두 입력해주세요.</strong>'; return; }
-  hint.textContent = '연결 테스트 중...';
-
-  SB_URL=url; SB_KEY=key; SB_USER=user;
-  try {
+  const url=document.getElementById('cfgUrl').value.trim().replace(/\/+$/,'');
+  const key=document.getElementById('cfgKey').value.trim();
+  const user=document.getElementById('cfgUser').value.trim()||'user';
+  const hint=document.getElementById('setupHint');
+  if(!url||!key){hint.innerHTML='<strong style="color:var(--coral)">URL과 Key를 모두 입력해주세요.</strong>';return;}
+  hint.textContent='연결 테스트 중...';
+  SB_URL=url;SB_KEY=key;
+  try{
     await sbPing();
     setCfg({url,key,user});
-    hint.textContent = '✅ 연결 성공!';
-    setTimeout(()=>launchApp(), 600);
-  } catch(e){
-    console.error('saveConfig error:', e);
-    hint.innerHTML = `<strong>연결 실패:</strong> ${e.message}<br><small style="color:#888">URL 끝에 슬래시 없이 입력했는지, Legacy anon key인지 확인해주세요.</small>`;
+    hint.textContent='✅ 연결 성공!';
+    setTimeout(()=>launchApp(),500);
+  }catch(e){
+    hint.innerHTML=`<strong style="color:var(--coral)">연결 실패:</strong> ${e.message}<br><small>URL 형식과 Legacy anon key를 확인해주세요.</small>`;
   }
 }
 
-/* ═══════════════════════════════════════
-   APP INIT
-═══════════════════════════════════════ */
-let cY, cM, sY, saveTimer=null;
-// 원 단위 입력 → 만원 단위 표시 (소수점 1자리)
-const fmt = n => {
-  const v = Number(n)||0;
-  if(v === 0) return '0';
-  const man = v / 10000;
-  if(Number.isInteger(man)) return man.toLocaleString('ko-KR');
-  return parseFloat(man.toFixed(1)).toLocaleString('ko-KR');
-};
-// 원 단위 그대로 표시 (입력칸 레이블용)
-const fmtWon = n => Math.round(Number(n)||0).toLocaleString('ko-KR');
-const mk  = (y,m) => `${y}-${String(m).padStart(2,'0')}`;
-
-window.onload = async () => {
-  const cfg = getCfg();
-  if(cfg){
-    SB_URL=cfg.url; SB_KEY=cfg.key; SB_USER=cfg.user;
-    await launchApp();
-  } else {
-    document.getElementById('setupScreen').style.display='block';
-  }
+/* ── APP INIT ── */
+window.onload=async()=>{
+  const cfg=getCfg();
+  if(cfg){SB_URL=cfg.url;SB_KEY=cfg.key;await launchApp();}
+  else{document.getElementById('setupScreen').style.display='block';}
 };
 
 async function launchApp(){
@@ -705,153 +546,106 @@ async function launchApp(){
   document.getElementById('mainApp').style.display='block';
   document.getElementById('mainHeader').style.display='flex';
   document.getElementById('mainNav').style.display='flex';
-
-  const now = new Date();
-  cY=now.getFullYear(); cM=now.getMonth()+1; sY=cY;
+  const now=new Date();cY=now.getFullYear();cM=now.getMonth()+1;sY=cY;
   updLabel();
-  setSyncStatus('busy','데이터 불러오는 중...');
+  setSS('busy','데이터 불러오는 중...');
   await loadAll();
-  renderInput(); updateAll();
-  setSyncStatus('ok','동기화됨');
+  renderInput();updateAll();
+  setSS('ok','동기화됨');
 }
 
-/* ═══════════════════════════════════════
-   SUPABASE DATA OPS
-═══════════════════════════════════════ */
+/* ── LOAD ALL ── */
 async function loadAll(){
-  try {
-    const months = await sbGet('budget_months', 'select=*&order=month_key.asc');
+  try{
+    const months=await sbGet('budget_months','select=*&order=month_key.asc');
     months.forEach(row=>{
-      cache[row.month_key] = {
-        myIncome:   Number(row.my_income)   || 0,
-        wifeIncome: Number(row.wife_income) || 0,
-        fixed:      Array.isArray(row.fixed_items)    ? row.fixed_items    : (row.fixed_items    ? JSON.parse(row.fixed_items)    : []),
-        variable:   Array.isArray(row.variable_items) ? row.variable_items : (row.variable_items ? JSON.parse(row.variable_items) : []),
-        note:       row.note || ''
+      cache[row.month_key]={
+        myIncome:  Number(row.my_income)||0,
+        wifeIncome:Number(row.wife_income)||0,
+        fixed:     Array.isArray(row.fixed_items)?row.fixed_items:(row.fixed_items?JSON.parse(row.fixed_items):[]),
+        variable:  Array.isArray(row.variable_items)?row.variable_items:(row.variable_items?JSON.parse(row.variable_items):[]),
+        note:      row.note||'',
+        _isNew:    false
       };
     });
-    const goals = await sbGet('budget_goal', 'select=id,amount&order=id.desc&limit=1');
-    if(goals.length) cache['goal'] = { id: goals[0].id, amount: Number(goals[0].amount)||0 };
-  } catch(e){
-    console.error('loadAll:', e);
-    setSyncStatus('err', '불러오기 실패: '+e.message);
+    const goals=await sbGet('budget_goal','select=id,amount&order=id.desc&limit=1');
+    if(goals.length)cache['goal']={id:goals[0].id,amount:Number(goals[0].amount)||0};
+  }catch(e){
+    console.error('loadAll:',e);
+    setSS('err','불러오기 실패: '+e.message);
   }
 }
 
+/* ── SAVE MONTH ── */
 async function saveMonth(key){
-  const d = cache[key];
-  if(!d) return;
-  setSyncStatus('busy','저장 중...');
-  const body = {
-    month_key:      key,
-    my_income:      d.myIncome,
-    wife_income:    d.wifeIncome,
-    fixed_items:    d.fixed,
-    variable_items: d.variable,
-    note:           d.note,
-    updated_at:     new Date().toISOString()
-  };
-  try {
-    // Try PATCH first (update existing row)
-    const patchR = await fetch(`${SB_URL}/rest/v1/budget_months?month_key=eq.${encodeURIComponent(key)}`, {
-      method:  'PATCH',
-      headers: sbBase({ 'Prefer': 'return=minimal' }),
-      body:    JSON.stringify(body)
-    });
-    if(patchR.status === 404 || patchR.headers.get('content-range') === '*/0') {
-      // Row doesn't exist yet, INSERT
-      await sbUpsert('budget_months', body);
-    } else if(!patchR.ok){
-      const t = await patchR.text();
-      throw new Error(`[${patchR.status}] ${t}`);
-    }
-    setSyncStatus('ok','저장됨 '+ new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}));
-  } catch(e){
-    setSyncStatus('err','저장 실패: '+e.message);
-  }
-}
-
-async function saveGoalToDB(amount){
-  setSyncStatus('busy','저장 중...');
-  try {
-    const existing = cache['goal'];
-    if(existing && existing.id){
-      // update existing row
-      const r = await fetch(`${SB_URL}/rest/v1/budget_goal?id=eq.${existing.id}`, {
-        method:'PATCH',
-        headers: sbBase({'Prefer':'return=minimal'}),
-        body: JSON.stringify({ amount, updated_at: new Date().toISOString() })
-      });
-      if(!r.ok){ const t=await r.text(); throw new Error(`[${r.status}] ${t}`); }
+  const d=cache[key];if(!d)return;
+  setSS('busy','저장 중...');
+  const body={month_key:key,my_income:d.myIncome,wife_income:d.wifeIncome,fixed_items:d.fixed,variable_items:d.variable,note:d.note,updated_at:new Date().toISOString()};
+  try{
+    if(d._isNew){
+      // 새 달 INSERT
+      await sbInsert('budget_months',body);
+      cache[key]._isNew=false;
     } else {
-      // insert first row
-      await sbUpsert('budget_goal', { amount, updated_at: new Date().toISOString() });
-      // reload to get the id
-      const goals = await sbGet('budget_goal','select=id,amount&order=id.desc&limit=1');
-      if(goals.length) cache['goal'] = { id: goals[0].id, amount };
+      // 기존 달 PATCH
+      await sbPatch('budget_months',`month_key=eq.${encodeURIComponent(key)}`,body);
     }
-    setSyncStatus('ok','저장됨');
-  } catch(e){ setSyncStatus('err','저장 실패: '+e.message); }
-}
-
-/* ═══════════════════════════════════════
-   SYNC STATUS
-═══════════════════════════════════════ */
-function setSyncStatus(state, text){
-  const dot = document.getElementById('syncDot');
-  const txt = document.getElementById('syncText');
-  dot.className = 'sync-dot '+state;
-  txt.textContent = text;
-}
-
-/* ═══════════════════════════════════════
-   SCHEDULED SAVE (debounce 1.5s)
-═══════════════════════════════════════ */
-function schedSave(){
-  // update cache immediately
-  const key = mk(cY,cM);
-  if(!cache[key]) cache[key]={myIncome:0,wifeIncome:0,fixed:[],variable:[],note:''};
-  cache[key].myIncome   = toNum(document.getElementById('myIncome').value);
-  cache[key].wifeIncome = toNum(document.getElementById('wifeIncome').value);
-  cache[key].note       = document.getElementById('noteInput').value;
-  calcSums(); updateAll();
-  // debounce DB write
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(()=>saveMonth(key), 1500);
-}
-
-/* ═══════════════════════════════════════
-   NAVIGATION
-═══════════════════════════════════════ */
-function chM(d){
-  cM+=d; if(cM>12){cM=1;cY++;} if(cM<1){cM=12;cY--;}
-  sY=cY; updLabel();
-  autoCarryFixed(); // 새 달로 이동시 고정지출 자동 복사
-  renderInput(); updateAll();
-  if(document.getElementById('page-stats').classList.contains('active')) renderStats();
-}
-
-function autoCarryFixed(){
-  const key = mk(cY,cM);
-  if(!cache[key]) cache[key]={myIncome:0,wifeIncome:0,fixed:[],variable:[],note:''};
-  // 이미 고정지출이 있으면 복사 안 함
-  if(cache[key].fixed && cache[key].fixed.length > 0) return;
-  // 이전 달 중 고정지출 있는 가장 최근 달 찾기
-  const keys = Object.keys(cache)
-    .filter(k => /^\d{4}-\d{2}$/.test(k) && k < key)
-    .sort().reverse();
-  for(const k of keys){
-    if(cache[k] && cache[k].fixed && cache[k].fixed.length > 0){
-      cache[key].fixed = JSON.parse(JSON.stringify(cache[k].fixed));
-      // DB 저장
-      clearTimeout(saveTimer);
-      saveTimer = setTimeout(()=>saveMonth(key), 800);
-      break;
-    }
+    setSS('ok','저장됨 '+new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}));
+  }catch(e){
+    // INSERT 실패시 PATCH 시도 (혹시 이미 존재)
+    try{await sbPatch('budget_months',`month_key=eq.${encodeURIComponent(key)}`,body);cache[key]._isNew=false;setSS('ok','저장됨');}
+    catch(e2){setSS('err','저장 실패: '+e2.message);}
   }
 }
-function updLabel(){ document.getElementById('mLbl').textContent=`${cY}.${String(cM).padStart(2,'0')}`; }
 
+async function saveGoalDB(amount){
+  setSS('busy','저장 중...');
+  try{
+    const g=cache['goal'];
+    if(g&&g.id){await sbPatch('budget_goal',`id=eq.${g.id}`,{amount,updated_at:new Date().toISOString()});}
+    else{await sbInsert('budget_goal',{amount,updated_at:new Date().toISOString()});const gs=await sbGet('budget_goal','select=id&order=id.desc&limit=1');if(gs.length)cache['goal']={id:gs[0].id,amount};}
+    setSS('ok','저장됨');
+  }catch(e){setSS('err','저장 실패: '+e.message);}
+}
+
+/* ── SYNC STATUS ── */
+function setSS(state,text){
+  document.getElementById('sdot').className='sdot '+state;
+  document.getElementById('stext').textContent=text;
+}
+
+/* ── AUTO CARRY FIXED ── */
+function autoCarryFixed(key){
+  if(!cache[key])cache[key]={myIncome:0,wifeIncome:0,fixed:[],variable:[],note:'',_isNew:true};
+  // 이미 고정지출 있으면 패스
+  if(cache[key].fixed&&cache[key].fixed.length>0)return false;
+  // 이전 달 중 고정지출 있는 가장 최근 달
+  const prevKeys=Object.keys(cache).filter(k=>/^\d{4}-\d{2}$/.test(k)&&k<key).sort().reverse();
+  for(const k of prevKeys){
+    if(cache[k]&&cache[k].fixed&&cache[k].fixed.length>0){
+      cache[key].fixed=JSON.parse(JSON.stringify(cache[k].fixed));
+      clearTimeout(saveTimer);
+      saveTimer=setTimeout(()=>saveMonth(key),800);
+      return true; // 복사됨
+    }
+  }
+  return false;
+}
+
+/* ── MONTH NAV ── */
+function goMonth(d){
+  cM+=d;if(cM>12){cM=1;cY++;}if(cM<1){cM=12;cY--;}
+  sY=cY;updLabel();
+  const key=mk(cY,cM);
+  const carried=autoCarryFixed(key);
+  renderInput(carried);
+  updateAll();
+  if(document.getElementById('page-stats').classList.contains('active'))renderStats();
+}
+function updLabel(){document.getElementById('mLbl').textContent=`${cY}.${String(cM).padStart(2,'0')}`;}
+const mk=(y,m)=>`${y}-${String(m).padStart(2,'0')}`;
+
+/* ── TABS ── */
 function switchTab(name,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
@@ -864,50 +658,31 @@ function switchStat(name){
   document.querySelectorAll('.stat-panel').forEach(p=>p.classList.remove('on'));
   document.getElementById('stab-'+name).classList.add('on');
   document.getElementById('spanel-'+name).classList.add('on');
-  if(name==='year') renderYearPanel(); else renderMonthPanel();
+  if(name==='year')renderYearPanel();else renderMonthPanel();
 }
 
-/* ═══════════════════════════════════════
-   RENDER INPUT
-═══════════════════════════════════════ */
-function md(key){
-  if(!cache[key]) cache[key]={myIncome:0,wifeIncome:0,fixed:[],variable:[],note:''};
-  return cache[key];
-}
-
-function getLatestFixed(){
-  // 현재 달 이전 중 고정지출이 있는 가장 최근 달 찾기
-  const keys = Object.keys(cache)
-    .filter(k => /^\d{4}-\d{2}$/.test(k) && k < mk(cY,cM))
-    .sort()
-    .reverse();
-  for(const k of keys){
-    if(cache[k] && cache[k].fixed && cache[k].fixed.length > 0){
-      return JSON.parse(JSON.stringify(cache[k].fixed)); // deep copy
-    }
-  }
-  return [];
-}
-
-function renderInput(){
-  const key = mk(cY,cM);
-  const d = md(key);
-
+/* ── RENDER INPUT ── */
+function renderInput(carried=false){
+  const key=mk(cY,cM);const d=md(key);
   document.getElementById('myIncome').value=d.myIncome?Number(d.myIncome).toLocaleString('ko-KR'):'';
   document.getElementById('wifeIncome').value=d.wifeIncome?Number(d.wifeIncome).toLocaleString('ko-KR'):'';
   document.getElementById('noteInput').value=d.note||'';
-  renderItems('fixed', cache[key].fixed||[]);
-  renderItems('variable', d.variable||[]);
+  renderItems('fixed',d.fixed||[]);
+  renderItems('variable',d.variable||[]);
+  // 복사됨 뱃지
+  const badge=document.getElementById('carryBadge');
+  badge.style.display=carried?'inline-flex':'none';
   calcSums();
 }
 
 function renderItems(type,items){
-  const c=document.getElementById(type+'Items'); c.innerHTML='';
+  const c=document.getElementById(type+'Items');c.innerHTML='';
   items.forEach((item,i)=>{
-    const div=document.createElement('div'); div.className='exp-item';
+    const div=document.createElement('div');div.className='exp-item';
+    const amtDisplay=item.amount?Number(item.amount).toLocaleString('ko-KR'):'';
     div.innerHTML=`<div class="exp-dot"></div>
       <input class="exp-name" value="${item.name||''}" placeholder="항목명" oninput="updItem('${type}',${i},'name',this.value)">
-      <input type="text" inputmode="numeric" class="exp-amt" value="${item.amount?Number(item.amount).toLocaleString('ko-KR'):''}" placeholder="0" oninput="onCommaInput(this);updItem('${type}',${i},'amount',this.value)">
+      <input type="text" inputmode="numeric" class="exp-amt" value="${amtDisplay}" placeholder="0" oninput="commaInput(this);updItem('${type}',${i},'amount',toNum(this.value))">
       <span class="exp-unit">원</span>
       <button class="exp-del" onclick="delItem('${type}',${i})">✕</button>`;
     c.appendChild(div);
@@ -915,30 +690,40 @@ function renderItems(type,items){
 }
 
 function addItem(type){
-  const key=mk(cY,cM); md(key)[type].push({name:'',amount:0});
-  renderItems(type,cache[key][type]); calcSums(); updateAll();
-  clearTimeout(saveTimer); saveTimer=setTimeout(()=>saveMonth(key),1500);
+  const key=mk(cY,cM);md(key)[type].push({name:'',amount:0});
+  renderItems(type,cache[key][type]);calcSums();updateAll();
+  clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveMonth(key),800);
 }
 function delItem(type,idx){
-  const key=mk(cY,cM); cache[key][type].splice(idx,1);
-  renderItems(type,cache[key][type]); calcSums(); updateAll();
-  clearTimeout(saveTimer); saveTimer=setTimeout(()=>saveMonth(key),1500);
+  const key=mk(cY,cM);cache[key][type].splice(idx,1);
+  renderItems(type,cache[key][type]);calcSums();updateAll();
+  clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveMonth(key),800);
 }
 function updItem(type,idx,field,val){
   const key=mk(cY,cM);
-  cache[key][type][idx][field]=field==='amount'?toNum(val):val;
-  calcSums(); updateAll();
-  clearTimeout(saveTimer); saveTimer=setTimeout(()=>saveMonth(key),1500);
-}
-function calcSums(){
-  const d=md(mk(cY,cM));
-  document.getElementById('fixedSum').textContent=fmt((d.fixed||[]).reduce((a,b)=>a+(b.amount||0),0))+'만원';
-  document.getElementById('variableSum').textContent=fmt((d.variable||[]).reduce((a,b)=>a+(b.amount||0),0))+'만원';
+  cache[key][type][idx][field]=field==='amount'?val:val;
+  calcSums();updateAll();
+  clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveMonth(key),800);
 }
 
-/* ═══════════════════════════════════════
-   CALCULATIONS
-═══════════════════════════════════════ */
+function schedSave(){
+  const key=mk(cY,cM);md(key);
+  cache[key].myIncome=toNum(document.getElementById('myIncome').value);
+  cache[key].wifeIncome=toNum(document.getElementById('wifeIncome').value);
+  cache[key].note=document.getElementById('noteInput').value;
+  calcSums();updateAll();
+  clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveMonth(key),800);
+}
+
+function calcSums(){
+  const d=md(mk(cY,cM));
+  const f=(d.fixed||[]).reduce((a,b)=>a+(b.amount||0),0);
+  const v=(d.variable||[]).reduce((a,b)=>a+(b.amount||0),0);
+  document.getElementById('fixedSum').textContent=fmtMan(f)+'만원';
+  document.getElementById('variableSum').textContent=fmtMan(v)+'만원';
+}
+
+/* ── CALC ── */
 function sm(key){
   const d=md(key);
   const inc=(d.myIncome||0)+(d.wifeIncome||0);
@@ -947,137 +732,118 @@ function sm(key){
   return{inc,exp:fixed+variable,fixed,variable,save:inc-(fixed+variable),note:d.note||''};
 }
 function totalSaved(){
-  return Object.keys(cache).filter(k=>k!=='goal' && /^\d{4}-\d{2}$/.test(k))
+  return Object.keys(cache).filter(k=>k!=='goal'&&/^\d{4}-\d{2}$/.test(k))
     .reduce((a,k)=>{const{inc,exp}=sm(k);return a+Math.max(0,inc-exp);},0);
 }
 
-/* ═══════════════════════════════════════
-   UPDATE UI
-═══════════════════════════════════════ */
+/* ── UPDATE UI ── */
 function updateAll(){
   const{save}=sm(mk(cY,cM));
-  const ts=totalSaved(), goal=(cache['goal']||{}).amount||0;
+  const ts=totalSaved(),goal=(cache['goal']||{}).amount||0;
   const pct=goal>0?Math.min(100,Math.round(ts/goal*100)):0;
-
-  document.getElementById('hAmt').innerHTML=fmt(ts)+'<span class="unit">만원</span>';
+  document.getElementById('hAmt').innerHTML=fmtMan(ts)+'<span class="u">만원</span>';
   document.getElementById('hPct').textContent=pct+'%';
   document.getElementById('hTrack').style.width=pct+'%';
-  document.getElementById('hGoal').textContent=goal?fmt(goal):'—';
-  document.getElementById('hRemain').textContent=goal?fmt(Math.max(0,goal-ts)):'—';
-  document.getElementById('hMsave').textContent=fmt(save);
-  document.getElementById('tSave').innerHTML=fmt(save)+'<span class="u">만원</span>';
-  document.getElementById('tCumul').innerHTML=fmt(ts)+'<span class="u">만원</span>';
+  document.getElementById('hGoal').textContent=goal?fmtMan(goal)+'만':'—';
+  document.getElementById('hRemain').textContent=goal?fmtMan(Math.max(0,goal-ts))+'만':'—';
+  document.getElementById('hMsave').textContent=fmtMan(save)+'만';
+  document.getElementById('tSave').innerHTML=fmtMan(save)+'<span class="u">만원</span>';
+  document.getElementById('tCumul').innerHTML=fmtMan(ts)+'<span class="u">만원</span>';
   updateHomeNote();
 }
 
 function updateHomeNote(){
-  const d=md(mk(cY,cM));
-  const el=document.getElementById('homeNote');
-  if(d.note&&d.note.trim()){
-    el.innerHTML=`<div class="note-month">${cY}년 ${cM}월</div><div class="note-text">${d.note.trim()}</div>`;
-  } else {
-    el.innerHTML=`<div class="note-month">${cY}년 ${cM}월</div><div class="note-empty">기록된 특이사항이 없습니다</div>`;
-  }
+  const d=md(mk(cY,cM));const el=document.getElementById('homeNote');
+  if(d.note&&d.note.trim()){el.innerHTML=`<div class="note-month">${cY}년 ${cM}월</div><div class="note-text">${d.note.trim()}</div>`;}
+  else{el.innerHTML=`<div class="note-month">${cY}년 ${cM}월</div><div class="note-empty">기록된 특이사항이 없습니다</div>`;}
 }
 
-/* ═══════════════════════════════════════
-   STATS
-═══════════════════════════════════════ */
+/* ── STATS ── */
 function renderStats(){
   const p=document.querySelector('.stat-panel.on');
-  if(p&&p.id==='spanel-month') renderMonthPanel(); else renderYearPanel();
+  if(p&&p.id==='spanel-month')renderMonthPanel();else renderYearPanel();
 }
 
 function renderMonthPanel(){
   const{inc,exp,fixed,variable,save}=sm(mk(cY,cM));
-  document.getElementById('msIncome').textContent=fmt(inc)+'만원';
-  document.getElementById('msSave').textContent=fmt(save)+'만원';
-  document.getElementById('msFixed').textContent=fmt(fixed)+'만원';
-  document.getElementById('msVariable').textContent=fmt(variable)+'만원';
+  document.getElementById('msIncome').textContent=fmtMan(inc)+'만원';
+  document.getElementById('msSave').textContent=fmtMan(save)+'만원';
+  document.getElementById('msFixed').textContent=fmtMan(fixed)+'만원';
+  document.getElementById('msVariable').textContent=fmtMan(variable)+'만원';
   const items=[{lbl:'수입',val:inc,color:'var(--teal)'},{lbl:'고정',val:fixed,color:'var(--coral)'},{lbl:'변동',val:variable,color:'var(--coral2)'},{lbl:'저축',val:Math.max(0,save),color:'var(--amber)'}];
   const maxV=Math.max(...items.map(i=>i.val),1);
   const wrap=document.getElementById('monthBars');
   if(inc===0&&exp===0){wrap.innerHTML='<div class="empty">이달 데이터가 없습니다</div>';return;}
-  wrap.innerHTML=items.map(it=>`<div class="hbar-row"><div class="hbar-lbl">${it.lbl}</div><div class="hbar-track"><div class="hbar-fill" style="width:${Math.max(2,it.val/maxV*100)}%;background:${it.color}"></div></div><div class="hbar-val">${fmt(it.val)}</div></div>`).join('');
+  wrap.innerHTML=items.map(it=>`<div class="hbar-row"><div class="hbar-lbl">${it.lbl}</div><div class="hbar-track"><div class="hbar-fill" style="width:${Math.max(2,it.val/maxV*100)}%;background:${it.color}"></div></div><div class="hbar-val">${fmtMan(it.val)}만</div></div>`).join('');
 }
 
 function renderYearPanel(){
   document.getElementById('yrLabel').textContent=sY;
-  const goal=(cache['goal']||{}).amount||0, ts=totalSaved();
+  const goal=(cache['goal']||{}).amount||0,ts=totalSaved();
   const pct=goal>0?Math.min(100,Math.round(ts/goal*100)):0;
-  document.getElementById('cAmt').innerHTML=fmt(ts)+'<span class="cumul-unit"> 만원</span>';
+  document.getElementById('cAmt').innerHTML=fmtMan(ts)+'<span class="cumul-unit"> 만원</span>';
   document.getElementById('cPct').textContent=pct;
   document.getElementById('cBar').style.width=pct+'%';
-  document.getElementById('cGoal').textContent=goal?fmt(goal):'—';
-  document.getElementById('cRemain').textContent=goal?fmt(Math.max(0,goal-ts)):'—';
-
-  const prevM=cM===1?12:cM-1, prevY=cM===1?cY-1:cY;
-  const{save:thisSave}=sm(mk(cY,cM)), {save:prevSave}=sm(mk(prevY,prevM));
+  document.getElementById('cGoal').textContent=goal?fmtMan(goal):'—';
+  document.getElementById('cRemain').textContent=goal?fmtMan(Math.max(0,goal-ts)):'—';
+  // 전월 대비
+  const prevM=cM===1?12:cM-1,prevY=cM===1?cY-1:cY;
+  const{save:thisSave}=sm(mk(cY,cM)),{save:prevSave}=sm(mk(prevY,prevM));
   const delta=thisSave-prevSave;
   const dEl=document.getElementById('cDelta');
-  if(thisSave||prevSave){
-    const cls=delta>0?'delta-up':delta<0?'delta-down':'delta-zero';
-    dEl.innerHTML=`<span class="delta-badge ${cls}">${delta>0?'+':''}${fmt(delta)}만원 전월 대비</span>`;
-  } else dEl.innerHTML='';
-
+  if(thisSave||prevSave){const cls=delta>0?'delta-up':delta<0?'delta-down':'delta-zero';dEl.innerHTML=`<span class="delta-badge ${cls}">${delta>0?'+':''}${fmtMan(delta)}만원 전월 대비</span>`;}
+  else dEl.innerHTML='';
+  // 12개월
   const months=Array.from({length:12},(_,i)=>({key:mk(sY,i+1),m:i+1,lbl:`${i+1}월`}));
   const sums=months.map(mo=>({...sm(mo.key),m:mo.m,lbl:mo.lbl}));
-  document.getElementById('ysInc').textContent=fmt(sums.reduce((a,b)=>a+b.inc,0));
-  document.getElementById('ysExp').textContent=fmt(sums.reduce((a,b)=>a+b.exp,0));
-  document.getElementById('ysSv').textContent=fmt(sums.reduce((a,b)=>a+Math.max(0,b.save),0));
-
-  const maxV=Math.max(...sums.map(s=>Math.max(s.inc,s.exp,1)),1), H=110;
-  const chart=document.getElementById('yrChart'); chart.innerHTML='';
+  document.getElementById('ysInc').textContent=fmtMan(sums.reduce((a,b)=>a+b.inc,0));
+  document.getElementById('ysExp').textContent=fmtMan(sums.reduce((a,b)=>a+b.exp,0));
+  document.getElementById('ysSv').textContent=fmtMan(sums.reduce((a,b)=>a+Math.max(0,b.save),0));
+  // 바 차트
+  const maxV=Math.max(...sums.map(s=>Math.max(s.inc,s.exp,1)),1),H=110;
+  const chart=document.getElementById('yrChart');chart.innerHTML='';
   [33,66].forEach(p=>{const g=document.createElement('div');g.className='dot-guide';g.style.bottom=(24+H*p/100)+'px';chart.appendChild(g);});
   sums.forEach(s=>{
     const isCur=s.m===cM&&sY===cY;
-    const g=document.createElement('div'); g.className='dc-group'+(isCur?' now':'');
-    const bars=document.createElement('div'); bars.className='dc-bars';
+    const g=document.createElement('div');g.className='dc-group'+(isCur?' now':'');
+    const bars=document.createElement('div');bars.className='dc-bars';
     [{h:s.inc/maxV*H,c:'var(--teal)'},{h:s.exp/maxV*H,c:'var(--coral)'},{h:Math.max(0,s.save)/maxV*H,c:'var(--amber)'}].forEach(b=>{
-      const el=document.createElement('div'); el.className='dc-bar'; el.style.height=Math.max(2,b.h)+'px'; el.style.background=b.c; bars.appendChild(el);
+      const el=document.createElement('div');el.className='dc-bar';el.style.height=Math.max(2,b.h)+'px';el.style.background=b.c;bars.appendChild(el);
     });
-    const lbl=document.createElement('div'); lbl.className='dc-lbl'+(isCur?' now':''); lbl.textContent=s.lbl;
-    g.appendChild(bars); g.appendChild(lbl); chart.appendChild(g);
+    const lbl=document.createElement('div');lbl.className='dc-lbl'+(isCur?' now':'');lbl.textContent=s.lbl;
+    g.appendChild(bars);g.appendChild(lbl);chart.appendChild(g);
   });
-
+  // 목록
   const list=document.getElementById('yrList');
   const wd=sums.filter(s=>s.inc>0||s.exp>0);
   if(!wd.length){list.innerHTML=`<div class="empty">${sY}년 데이터가 없습니다</div>`;return;}
   const maxI=Math.max(...wd.map(s=>s.inc),1);
   list.innerHTML=wd.map(s=>{
     const iW=Math.round(s.inc/maxI*100),eW=Math.round(s.exp/maxI*100);
-    const isCur=s.m===cM&&sY===cY;
-    const sc=s.save>=0?'var(--teal)':'var(--coral)';
-    return`<div class="yr-row${isCur?' now':''}"><div class="yr-mo">${s.lbl}</div><div class="yr-bars"><div class="yr-br"><div class="yr-b" style="width:${iW}%;flex:1;max-width:${iW}%;background:var(--teal)"></div><span class="yr-bl">${fmt(s.inc)}</span></div><div class="yr-br"><div class="yr-b" style="width:${eW}%;flex:1;max-width:${eW}%;background:var(--coral)"></div><span class="yr-bl">${fmt(s.exp)}</span></div></div><div class="yr-sv" style="color:${sc}">${s.save>=0?'+':''}${fmt(s.save)}</div></div>`;
+    const isCur=s.m===cM&&sY===cY;const sc=s.save>=0?'var(--teal)':'var(--coral)';
+    return`<div class="yr-row${isCur?' now':''}"><div class="yr-mo">${s.lbl}</div><div class="yr-bars"><div class="yr-br"><div class="yr-b" style="width:${iW}%;flex:1;max-width:${iW}%;background:var(--teal)"></div><span class="yr-bl">${fmtMan(s.inc)}만</span></div><div class="yr-br"><div class="yr-b" style="width:${eW}%;flex:1;max-width:${eW}%;background:var(--coral)"></div><span class="yr-bl">${fmtMan(s.exp)}만</span></div></div><div class="yr-sv" style="color:${sc}">${s.save>=0?'+':''}${fmtMan(s.save)}만</div></div>`;
   }).join('');
 }
+function chY(d){sY+=d;renderYearPanel();}
 
-function chY(d){ sY+=d; renderYearPanel(); }
-
-/* ═══════════════════════════════════════
-   GOAL
-═══════════════════════════════════════ */
+/* ── GOAL ── */
 function openGoal(){
-  const ga=(cache['goal']||{}).amount||0; document.getElementById('goalInput').value=ga?Number(ga).toLocaleString('ko-KR'):'';
+  const g=(cache['goal']||{}).amount||0;
+  document.getElementById('goalInput').value=g?Number(g).toLocaleString('ko-KR'):'';
   document.getElementById('overlay').classList.add('show');
 }
 async function saveGoal(){
   const amount=toNum(document.getElementById('goalInput').value);
-  cache['goal']={amount};
+  if(!cache['goal'])cache['goal']={};
+  cache['goal'].amount=amount;
   document.getElementById('overlay').classList.remove('show');
   updateAll();
-  await saveGoalToDB(amount);
+  await saveGoalDB(amount);
 }
 document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');});
 
-/* ═══════════════════════════════════════
-   TOAST
-═══════════════════════════════════════ */
-function toast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2000);
-}
+/* ── TOAST ── */
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}
 </script>
 </body>
 </html>
