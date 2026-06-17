@@ -619,15 +619,15 @@ function autoCarryFixed(key){
   if(!cache[key])cache[key]={myIncome:0,wifeIncome:0,fixed:[],variable:[],note:'',_isNew:true};
   // 이미 고정지출 있으면 패스
   if(cache[key].fixed&&cache[key].fixed.length>0)return false;
-  // 이전 달 중 고정지출 있는 가장 최근 달
-  const prevKeys=Object.keys(cache).filter(k=>/^\d{4}-\d{2}$/.test(k)&&k<key).sort().reverse();
-  for(const k of prevKeys){
-    if(cache[k]&&cache[k].fixed&&cache[k].fixed.length>0){
-      cache[key].fixed=JSON.parse(JSON.stringify(cache[k].fixed));
-      clearTimeout(saveTimer);
-      saveTimer=setTimeout(()=>saveMonth(key),800);
-      return true; // 복사됨
-    }
+  // 정확히 바로 직전 달만 복사
+  const d=new Date(key+'-01');
+  d.setMonth(d.getMonth()-1);
+  const prevKey=mk(d.getFullYear(),d.getMonth()+1);
+  if(cache[prevKey]&&cache[prevKey].fixed&&cache[prevKey].fixed.length>0){
+    cache[key].fixed=JSON.parse(JSON.stringify(cache[prevKey].fixed));
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(()=>saveMonth(key),800);
+    return true; // 복사됨
   }
   return false;
 }
