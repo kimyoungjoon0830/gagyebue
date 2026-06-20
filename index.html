@@ -174,20 +174,18 @@ body.night .tt-btn.on{color:#0F1623}
 .safe-card{background:var(--card);border-radius:var(--r);overflow:hidden;margin-bottom:10px;box-shadow:var(--sh-sm)}
 .safe-head{display:flex;align-items:center;gap:6px;padding:12px 14px;background:var(--card2);border-bottom:1px solid var(--line)}
 .safe-head-title{font-size:13px;font-weight:700;color:var(--ink)}
-.safe-thead{display:flex;padding:8px 12px;background:var(--card2);border-bottom:1px solid var(--line);font-size:9px;font-weight:700;color:var(--ink3);letter-spacing:.3px}
-.safe-thead span:nth-child(1){flex:1.4}
-.safe-thead span:nth-child(2){flex:1;text-align:right}
-.safe-thead span:nth-child(3){flex:1.1;text-align:right}
-.safe-thead span:nth-child(4){flex:1;text-align:right}
-.safe-row{display:flex;align-items:center;padding:10px 12px;border-bottom:1px solid var(--line);font-size:12px}
+.safe-thead{display:flex;padding:8px 10px;background:var(--card2);border-bottom:1px solid var(--line);font-size:9px;font-weight:700;color:var(--ink3);letter-spacing:.3px}
+.safe-thead span{flex:1;text-align:center}
+.safe-thead span:nth-child(1){flex:1.1}
+.safe-row{display:flex;align-items:center;padding:11px 10px;border-bottom:1px solid var(--line);font-size:12px}
 .safe-row:last-child{border-bottom:none}
-.safe-name{flex:1.4;color:var(--ink);font-weight:500}
-.safe-add{flex:1;text-align:right;color:var(--teal);font-family:'Inter',sans-serif;font-weight:600}
-.safe-spend{flex:1.1;text-align:right}
-.safe-spend input{font-family:'Inter',sans-serif;font-size:12px;font-weight:600;text-align:right;width:54px;border:1.5px solid var(--line);border-radius:6px;padding:3px 6px;outline:none;color:var(--coral);background:none}
+.safe-name{flex:1.1;text-align:center;color:var(--ink);font-weight:600;font-size:12px}
+.safe-add{flex:1;text-align:center;color:var(--teal);font-family:'Inter',sans-serif;font-weight:600;font-size:11px}
+.safe-spend{flex:1;text-align:center}
+.safe-spend input{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;text-align:center;width:100%;max-width:74px;border:1.5px solid var(--line);border-radius:6px;padding:4px 3px;outline:none;color:var(--coral);background:none}
 .safe-spend input:focus{border-color:var(--coral)}
 .safe-spend input::placeholder{color:var(--ink3)}
-.safe-cum{flex:1;text-align:right;font-family:'Inter',sans-serif;font-weight:700;color:var(--ink)}
+.safe-cum{flex:1;text-align:center;font-family:'Inter',sans-serif;font-weight:700;color:var(--ink);font-size:11px}
 .safe-cum.minus{color:var(--coral)}
 .safe-empty{padding:18px;text-align:center;font-size:12px;color:var(--ink3);line-height:1.5}
 .safe-foot{font-size:9px;color:var(--ink3);text-align:center;padding:8px}
@@ -329,7 +327,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 
 <div class="header" id="mainHeader" style="display:none">
   <div>
-    <div class="brand-name">영준 &amp; 원지 💑</div>
+    <div class="brand-name">영준 &amp; 원지 🐑❤️🐴</div>
     <div class="brand-sub">Family Budget</div>
     <div class="sync-row">
       <div class="sdot off" id="sdot"></div>
@@ -347,7 +345,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 <div id="setupScreen">
   <div class="setup-wrap">
     <div class="setup-hero">
-      <div class="setup-icon">💑</div>
+      <div class="setup-icon">🐑❤️🐴</div>
       <div class="setup-title">영준 &amp; 원지 가계부</div>
       <div class="setup-desc">Supabase를 연결하면 아이폰, 아이패드, 노트북<br>모든 기기에서 데이터가 자동 동기화돼요.</div>
     </div>
@@ -449,7 +447,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
     <div class="safe-card">
       <div class="safe-thead"><span>항목</span><span>적립</span><span>지출</span><span>누계</span></div>
       <div id="safeRows"></div>
-      <div class="safe-foot">적립 = 고정지출에서 자동 연동 · 지출만 입력 · 단위 만원</div>
+      <div class="safe-foot">적립 = 고정지출 자동 연동 · 지출만 입력 · 원 단위</div>
     </div>
 
     <div class="confirm-notice" id="confirmNotice">
@@ -932,24 +930,21 @@ function renderSafe(){
     const add=it.amount||0;                       // 이번달 적립(원)
     const spend=d.safeSpend[nm]||0;               // 이번달 지출(원)
     const cum=safeCumulative(nm);                 // 누계(원, 이번달 포함)
-    const spendDisp=spend?fmtMan(spend):'';
+    const spendDisp=spend?Number(spend).toLocaleString('ko-KR'):'';
     return `<div class="safe-row">
       <span class="safe-name">${nm}</span>
-      <span class="safe-add">${add?fmtMan(add):'·'}</span>
-      <span class="safe-spend"><input type="text" inputmode="decimal" value="${spendDisp}" placeholder="·" oninput="updSafeSpend('${nm.replace(/'/g,"\\'")}',this.value)"></span>
-      <span class="safe-cum${cum<0?' minus':''}">${fmtManSigned(cum)}</span>
+      <span class="safe-add">${add?Number(add).toLocaleString('ko-KR'):'·'}</span>
+      <span class="safe-spend"><input type="text" inputmode="numeric" value="${spendDisp}" placeholder="0" oninput="commaInput(this);updSafeSpend('${nm.replace(/'/g,"\\'")}',this.value)"></span>
+      <span class="safe-cum${cum<0?' minus':''}">${fmtWonSigned(cum)}</span>
     </div>`;
   }).join('');
 }
 
-// 금고 지출 입력 (만원 단위 → 원 저장)
+// 금고 지출 입력 (원 단위 그대로 저장)
 function updSafeSpend(name,val){
   const key=mk(cY,cM);const d=md(key);
   if(!d.safeSpend)d.safeSpend={};
-  // 만원 단위 입력 → 원으로 변환 (소수점 허용)
-  const num=parseFloat((val||'').toString().replace(/[^0-9.]/g,''))||0;
-  d.safeSpend[name]=Math.round(num*10000);
-  // 누계만 다시 그림 (입력 포커스 유지 위해 행 전체는 안 건드림)
+  d.safeSpend[name]=toNum(val);
   renderSafeCumOnly();
   updateAll();
   clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveMonth(key),600);
@@ -963,28 +958,31 @@ function renderSafeCumOnly(){
   items.forEach((it,idx)=>{
     const cum=safeCumulative(it.name.trim());
     const cell=rows[idx]&&rows[idx].querySelector('.safe-cum');
-    if(cell){cell.textContent=fmtManSigned(cum);cell.classList.toggle('minus',cum<0);}
+    if(cell){cell.textContent=fmtWonSigned(cum);cell.classList.toggle('minus',cum<0);}
   });
 }
 
-// 항목 누계: 확정된 과거달 + 이번달(현재 보고있는 달)까지 적립-지출 누적
-// 단, 통계/홈 누적과 달리 금고는 "현재 보는 달까지" 실제 흐름으로 계산
+// 항목 누계: 현재 보는 달까지 적립-지출 누적 (실제 잔액 흐름)
 function safeCumulative(name){
   const curKey=mk(cY,cM);
   let cum=0;
   Object.keys(cache).filter(k=>/^\d{4}-\d{2}$/.test(k)&&k<=curKey).sort().forEach(k=>{
     const m=cache[k];
-    // 적립: 해당 항목이 safe 체크된 고정지출이면 그 금액
     const fx=(m.fixed||[]).find(it=>it.safe&&it.name&&it.name.trim()===name);
     if(fx)cum+=(fx.amount||0);
-    // 지출
     const sp=(m.safeSpend&&m.safeSpend[name])||0;
     cum-=sp;
   });
   return cum;
 }
 
-// 부호 있는 만원 표기 (0 생략, 소수점 1자리)
+// 부호 있는 원 단위 표기 (콤마)
+function fmtWonSigned(won){
+  const v=Math.round(Number(won)||0);
+  return v.toLocaleString('ko-KR');
+}
+
+// 부호 있는 만원 표기 (0 생략, 소수점 1자리) — 통계용 유지
 function fmtManSigned(won){
   const v=Number(won)||0;
   if(v===0)return'0';
@@ -1145,8 +1143,8 @@ function renderSboxStats(){
     card.innerHTML='<div class="safe-empty">고정지출에서 💰 체크하면<br>여기에 금고가 표시돼요</div>';
     return;
   }
-  // 각 항목 누계 (전체 기간)
-  const list=[...names].map(nm=>({nm,cum:safeCumulativeAll(nm)}));
+  // 각 항목 현재 잔액 (현재 보는 달까지)
+  const list=[...names].map(nm=>({nm,cum:safeCumulative(nm)}));
   list.sort((a,b)=>b.cum-a.cum);
   const maxAbs=Math.max(...list.map(x=>Math.abs(x.cum)),1);
   const colors=['#378ADD','#1D9E75','#EF9F27','#7F77DD','#D85A30','#E24B4A','#9C6ADE'];
@@ -1154,7 +1152,7 @@ function renderSboxStats(){
     const w=Math.max(3,Math.abs(x.cum)/maxAbs*100);
     const col=x.cum<0?'#E24B4A':colors[i%colors.length];
     return `<div class="sbox-item">
-      <div class="sbox-row"><span class="sbox-name">${x.nm}</span><span class="sbox-val${x.cum<0?' minus':''}">${fmtManSigned(x.cum)}만</span></div>
+      <div class="sbox-row"><span class="sbox-name">${x.nm}</span><span class="sbox-val${x.cum<0?' minus':''}">${fmtWonSigned(x.cum)}원</span></div>
       <div class="sbox-track"><div class="sbox-fill" style="width:${w}%;background:${col}"></div></div>
     </div>`;
   }).join('');
@@ -1229,9 +1227,14 @@ function renderYearPanel(){
   const dEl=document.getElementById('cDelta');
   if(thisSave||prevSave){const cls=delta>0?'delta-up':delta<0?'delta-down':'delta-zero';dEl.innerHTML=`<span class="delta-badge ${cls}">${delta>0?'+':''}${fmtMan(delta)}만원 전월 대비</span>`;}
   else dEl.innerHTML='';
-  // 12개월
+  // 12개월 — 확정(confirmed)된 달만 수치 반영, 미확정은 0 처리
   const months=Array.from({length:12},(_,i)=>({key:mk(sY,i+1),m:i+1,lbl:`${i+1}월`}));
-  const sums=months.map(mo=>({...sm(mo.key),m:mo.m,lbl:mo.lbl}));
+  const sums=months.map(mo=>{
+    const conf=cache[mo.key]&&cache[mo.key].confirmed;
+    if(conf){return{...sm(mo.key),m:mo.m,lbl:mo.lbl,confirmed:true};}
+    // 미확정 달은 집계에서 제외 (0)
+    return{inc:0,exp:0,fixed:0,variable:0,save:0,m:mo.m,lbl:mo.lbl,confirmed:false};
+  });
   document.getElementById('ysInc').textContent=fmtMan(sums.reduce((a,b)=>a+b.inc,0));
   document.getElementById('ysExp').textContent=fmtMan(sums.reduce((a,b)=>a+b.exp,0));
   document.getElementById('ysSv').textContent=fmtMan(sums.reduce((a,b)=>a+Math.max(0,b.save),0));
@@ -1249,10 +1252,10 @@ function renderYearPanel(){
     const lbl=document.createElement('div');lbl.className='dc-lbl'+(isCur?' now':'');lbl.textContent=s.lbl;
     g.appendChild(bars);g.appendChild(lbl);chart.appendChild(g);
   });
-  // 목록
+  // 목록 — 확정된 달만 표시
   const list=document.getElementById('yrList');
-  const wd=sums.filter(s=>s.inc>0||s.exp>0);
-  if(!wd.length){list.innerHTML=`<div class="empty">${sY}년 데이터가 없습니다</div>`;return;}
+  const wd=sums.filter(s=>s.confirmed&&(s.inc>0||s.exp>0));
+  if(!wd.length){list.innerHTML=`<div class="empty">${sY}년 확정된 달이 없습니다</div>`;return;}
   const maxI=Math.max(...wd.map(s=>s.inc),1);
   list.innerHTML=wd.map(s=>{
     const iW=Math.round(s.inc/maxI*100),eW=Math.round(s.exp/maxI*100);
