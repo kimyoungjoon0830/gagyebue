@@ -332,6 +332,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
     <div class="sync-row">
       <div class="sdot off" id="sdot"></div>
       <span class="stext" id="stext">연결 중...</span>
+      <button onclick="reconnect()" style="margin-left:6px;background:none;border:1px solid var(--line);border-radius:6px;padding:2px 7px;font-size:10px;color:var(--ink3);cursor:pointer;font-family:inherit;">재연결</button>
     </div>
   </div>
   <div class="mpill">
@@ -536,6 +537,14 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
 const CFG_KEY='gb_v5_cfg';
 const getCfg=()=>{try{return JSON.parse(localStorage.getItem(CFG_KEY))||null;}catch{return null;}};
 const setCfg=c=>localStorage.setItem(CFG_KEY,JSON.stringify(c));
+
+function reconnect(){
+  try{localStorage.removeItem(CFG_KEY);}catch{}
+  document.getElementById('mainApp').style.display='none';
+  document.getElementById('mainHeader').style.display='none';
+  document.getElementById('mainNav').style.display='none';
+  document.getElementById('setupScreen').style.display='block';
+}
 
 /* ── THEME ── */
 const THEME_KEY='gb_theme';
